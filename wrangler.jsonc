@@ -1,0 +1,16 @@
+{
+  // Production hotfix — this file was missing entirely, which is the most
+  // likely reason the deployed Worker (racine-dor.armeldehe878.workers.dev)
+  // ended up serving something other than this repo's actual static build:
+  // without it, nothing tells Cloudflare's Worker that this is a pure
+  // static site with no server script. Declaring "assets.directory" and
+  // omitting "main" makes this a static-assets-only Worker — Cloudflare
+  // serves dist/ directly, byte for byte, exactly like the local build
+  // already verified to contain zero "/_image" runtime references. No
+  // adapter, no server code, no Astro SSR involved.
+  "name": "racine-dor",
+  "compatibility_date": "2026-09-09",
+  "assets": {
+    "directory": "./dist"
+  }
+}

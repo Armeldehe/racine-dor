@@ -10,6 +10,15 @@ export default defineConfig({
   // that derives from `site` (see src/layouts/BaseLayout.astro,
   // src/pages/robots.txt.ts, src/pages/sitemap.xml.ts) updates on its own.
   site: 'https://racinedor.example',
+  // Production hotfix — made explicit (this was already the default) after
+  // the deployed Worker was found serving runtime `/_image?...` URLs that
+  // 404 on Cloudflare's static-assets Worker. A clean local `npm run build`
+  // from this exact config already produces zero `/_image` references (every
+  // <Image>/<Picture> is pre-rendered to a real hashed file in dist/_astro/
+  // at build time) — `/_image` is only ever emitted when `output` is
+  // 'server'/'hybrid', which this project has never used. Spelling it out
+  // removes any ambiguity for whatever built the currently-deployed Worker.
+  output: 'static',
   compressHTML: true,
   image: {
     // Default sharp-based build-time image service (AVIF/WebP + responsive srcset).
