@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+import serumCutout from '../assets/img/serum-cutout.png';
+import serumDropMacro from '../assets/img/serum-drop-macro.jpg';
+import butterTextureMacro from '../assets/img/butter-texture-macro.jpg';
+---
+
+<section
+  class="transition"
+  data-transition-wrapper
+  data-cta-label="Commander"
+  data-cta-mode="compact"
+  aria-hidden="true"
+>
+  <div class="transition__sticky">
+    <Image
+      src={butterTextureMacro}
+      alt=""
+      widths={[480, 800]}
+      sizes="100vw"
+      loading="lazy"
+      class="transition__layer transition__layer--bottom"
+    />
+    <Image
+      src={serumDropMacro}
+      alt=""
+      widths={[480, 800]}
+      sizes="100vw"
+      loading="lazy"
+      class="transition__layer transition__layer--mid"
+      data-transition-top
+    />
+    <Image
+      src={serumCutout}
+      alt=""
+      widths={[240, 360]}
+      sizes="60vw"
+      loading="lazy"
+      class="transition__product"
+      data-transition-product
+    />
+  </div>
+</section>
+
+<style>
+  .transition {
+    position: relative;
+    height: 118svh;
+    /* Bridges Sérum's deep forest into Beurre's warm ivoire so there is
+       never a blank/wrong-colour gap outside the sticky window. */
+    background: linear-gradient(180deg, #171c11 0%, #2c2013 60%, #f1e4c6 100%);
+    /* Purely decorative, no interaction anywhere inside — never let it
+       intercept a scroll/tap gesture meant for the page. */
+    pointer-events: none;
+  }
+  .transition__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .transition__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+  }
+  .transition__layer--mid {
+    will-change: transform, opacity;
+  }
+  .transition__product {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44vw;
+    max-width: 200px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1);
+    will-change: transform, opacity;
+  }
+</style>

@@ -1,0 +1,214 @@
+---
+// PHASE 7 — Opening Journey. ONE cinematic scroll-driven chapter:
+// Hero -> serum motion (drop forms/detaches/falls) -> short match-cut
+// flash -> butter motion (closed jar -> lid opens -> tilt -> texture) ->
+// exit teaser. Reuses scroll-scrub.ts unmodified (see
+// opening-journey-scrub.ts). Lives only on /qa/opening-journey for now —
+// not wired into the homepage.
+//
+// PHASE 7.1: the serum/butter motion layers are pre-extracted WebP frame
+// sequences drawn to <canvas>, not <video> — real scroll QA on the
+// original video.currentTime engine found small stutters/freezes from
+// repeated seeking. See OpeningJourneyVideo.astro for the frozen
+// original video-based version (kept at /qa/opening-journey-video for
+// comparison only).
+//
+// PHASE 8.1: removed the separate static Hero photo layer entirely — the
+// Hero IS Opening Journey now. The serum canvas is visible (its own
+// frame 0, the bottle establishing shot) from progress 0, and the Hero
+// copy is a text overlay on top of it that fades out early as the
+// visitor starts scrolling. See opening-journey-scrub.ts for the exact
+// fade curve.
+---
+
+<section
+  class="opening-journey"
+  data-opening-journey
+  data-cta-label="Commander"
+  data-cta-mode="hidden"
+  aria-label="Racine d'Or — l'histoire du soin"
+>
+  <div class="opening-journey__stage">
+    <div class="opening-journey__layer opening-journey__scrim" aria-hidden="true"></div>
+
+    <div class="opening-journey__layer opening-journey__hero-content" data-layer="hero-content">
+      <h1 class="opening-journey__brand">Racine d'Or</h1>
+      <p class="opening-journey__quote">
+        « Chaque goutte est un soin<br />précieux pour tes racines. »
+      </p>
+      <a class="opening-journey__cta" href="#routines">
+        Découvrir ma routine
+        <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+
+    <canvas
+      class="opening-journey__layer opening-journey__canvas opening-journey__canvas--serum"
+      data-layer="serum-canvas"
+      aria-hidden="true"
+    ></canvas>
+
+    <div class="opening-journey__layer opening-journey__flash" data-layer="flash" aria-hidden="true"></div>
+
+    <canvas
+      class="opening-journey__layer opening-journey__canvas opening-journey__canvas--butter"
+      data-layer="butter-canvas"
+      aria-hidden="true"
+    ></canvas>
+
+    <div class="opening-journey__layer opening-journey__exit-content" data-layer="exit-content">
+      <p class="opening-journey__exit-line">Nourrir en profondeur.</p>
+      <p class="opening-journey__exit-teaser">Découvrir les soins Racine d'Or</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .opening-journey {
+    position: relative;
+    /* 380svh: enough scroll room for the establishing shot, the drop
+       forming/detaching/falling, a short flash, the lid opening, the
+       tilt-and-reveal, and the exit — without ever leaving a stretch of
+       scroll with no visible change (the Phase 5/6 "dead scroll" lesson). */
+    height: 380svh;
+    background: var(--forest-deep);
+  }
+  .opening-journey__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .opening-journey__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  /* Phase 8.1: the scrim now sits over the serum canvas (not a separate
+     photo) purely to keep the Hero copy legible on its very first frame —
+     it fades out together with the Hero copy (see opening-journey-scrub.ts)
+     so it never dims the cinematic footage once the text is gone.
+     Phase 8.2: strengthened the bottom stop — the botanical background
+     and product can otherwise compete with the wordmark/quote there. */
+  .opening-journey__scrim {
+    z-index: 2;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 18, 10, 0.26) 0%,
+      rgba(15, 18, 10, 0) 34%,
+      rgba(15, 18, 10, 0) 50%,
+      rgba(15, 18, 10, 0.92) 100%
+    );
+  }
+
+  .opening-journey__hero-content {
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    will-change: transform, opacity, filter;
+  }
+  .opening-journey__brand {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-hero);
+    line-height: var(--lh-display);
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+    color: var(--text-on-forest);
+  }
+  .opening-journey__quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-lg);
+    line-height: 1.45;
+    text-wrap: balance;
+    color: var(--text-on-forest);
+    max-width: 640px;
+  }
+  .opening-journey__cta {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    min-height: var(--btn-min-height);
+    gap: 8px;
+    margin-top: 26px;
+    padding: var(--btn-padding-y) 20px;
+    border: 1.5px solid rgba(244, 238, 220, 0.75);
+    border-radius: var(--btn-radius);
+    color: var(--text-on-forest);
+    background: rgba(23, 28, 17, 0.28);
+    text-decoration: none;
+    font-family: var(--btn-font);
+    font-weight: 600;
+    font-size: var(--btn-font-size);
+    pointer-events: auto;
+  }
+
+  .opening-journey__canvas {
+    /* Below the Hero copy/scrim (which fade out early) but the base
+       visual layer otherwise — this canvas IS the Hero background now. */
+    z-index: 1;
+    opacity: 0;
+    background: #171c11;
+    will-change: opacity, filter, transform;
+    /* object-fit/object-position are replicated manually in JS (drawCover
+       in frame-sequence.ts) since a canvas's own bitmap has no notion of
+       either — this rule only keeps the element's CSS box full-bleed. */
+    object-fit: cover;
+  }
+  .opening-journey__canvas--butter {
+    z-index: 5;
+  }
+
+  /* Short golden match-cut flash — a wipe, never a physical liquid-to-
+     butter morph. Sits above the serum layer, below the butter layer's
+     own natural fade-in. */
+  .opening-journey__flash {
+    z-index: 4;
+    background: radial-gradient(120% 100% at 50% 55%, #f7e2a8 0%, #d9b968 46%, #8a621f 100%);
+    opacity: 0;
+  }
+
+  .opening-journey__exit-content {
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    gap: 6px;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    opacity: 0;
+    background: linear-gradient(180deg, rgba(15, 18, 10, 0) 40%, rgba(15, 18, 10, 0.55) 100%);
+  }
+  .opening-journey__exit-line {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-h2);
+    line-height: var(--lh-heading);
+    color: var(--text-on-forest);
+  }
+  .opening-journey__exit-teaser {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--text-muted-on-dark);
+    letter-spacing: 0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .opening-journey__layer {
+      transition: none !important;
+    }
+  }
+</style>

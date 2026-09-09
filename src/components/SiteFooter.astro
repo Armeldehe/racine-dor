@@ -1,0 +1,77 @@
+---
+// Phase 8.4 — the deliberate final "brand signature" moment: this is now
+// the only place the tagline + "Made in Côte d'Ivoire" line appear (Brand
+// Story's body used to repeat them at its own end — removed there to
+// avoid the wall-of-text/duplication, so the signature reads once, here,
+// right where the site actually ends).
+//
+// Post-8.4 reorder: Brand Story's roots photo now comes immediately
+// before Footer (it used to be ivoire text). The photo already fades to
+// near-black at its own bottom (see SceneMarque.astro's
+// .marque__scrim-bottom), so Footer no longer needs its own ivoire-topped
+// gradient — a flat forest-deep ground now continues that darkness
+// instead of fighting it.
+//
+// Phase 9.2 §10 — a real logo asset now exists, replacing the typographic
+// "RO" placeholder used since Phase 8.4. Its laurel wreath is a dark
+// charcoal that reads poorly straight on --forest-deep (near-black on
+// near-black — measured by direct pixel sampling), so this uses the
+// white-ground variant the asset itself was provided in rather than
+// fabricating a new backing plate.
+import { Image } from 'astro:assets';
+import logoMark from '../assets/img/logo-fond_blanc.jpeg';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Image src={logoMark} alt="" aria-hidden="true" width={200} height={200} loading="lazy" class="site-footer__mark" />
+  <p class="site-footer__brand">Racine d'Or</p>
+  <p class="site-footer__tagline">« Chaque goutte est un soin précieux pour tes racines. »</p>
+  <p class="site-footer__signature">Pensé pour tes racines. Made in Côte d'Ivoire.</p>
+  <p class="site-footer__copy">© {year} Racine d'Or</p>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--forest-deep);
+    color: var(--text-muted-on-dark);
+    text-align: center;
+    padding: clamp(40px, 8vh, 72px) var(--gutter) clamp(28px, 6vh, 48px);
+  }
+  .site-footer__mark {
+    display: block;
+    margin: 0 auto;
+    width: clamp(64px, 18vw, 96px);
+    height: auto;
+    border-radius: 12px;
+  }
+  .site-footer__brand {
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.35rem;
+    color: var(--text-on-forest);
+  }
+  .site-footer__tagline {
+    margin-top: 10px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--text-muted-on-dark);
+  }
+  .site-footer__signature {
+    margin-top: 14px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--text-muted-on-dark);
+  }
+  .site-footer__copy {
+    margin-top: 20px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--text-muted-on-dark);
+  }
+</style>

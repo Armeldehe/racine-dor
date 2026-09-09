@@ -1,0 +1,90 @@
+---
+// Phase 8 §19 — extremely light nav: wordmark + a few discrete anchors.
+// A translucent dark bar (not a scroll-linked theme swap) keeps legible
+// contrast whether it's sitting over the dark Opening Journey or a later
+// ivoire section. Nav links are hidden below 640px — mobile shows only
+// the wordmark and a single "Commander" pill, per the brief's own
+// "menu discret" instruction, rather than a hamburger/drawer.
+import { buildWhatsAppLink, greetingFor } from '../config/site';
+
+const commanderHref = buildWhatsAppLink(greetingFor("ma routine Racine d'Or"));
+---
+
+<header class="site-header">
+  <a class="site-header__brand" href="#main">Racine d'Or</a>
+  <nav class="site-header__nav" aria-label="Navigation principale">
+    <a href="#soins">Soins</a>
+    <a href="#routines">Routines</a>
+    <a href="#marque">Notre histoire</a>
+  </nav>
+  <a
+    class="site-header__cta"
+    href={commanderHref}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-track-source="header"
+    data-track-item="generic"
+    data-track-item-type="generic"
+  >Commander</a>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px var(--gutter);
+    background: rgba(23, 28, 17, 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .site-header__brand {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--text-on-forest);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    flex: none;
+  }
+  .site-header__nav {
+    display: none;
+    gap: clamp(16px, 3vw, 32px);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+  }
+  .site-header__nav a {
+    color: var(--text-muted-on-dark);
+    text-decoration: none;
+  }
+  .site-header__nav a:hover,
+  .site-header__nav a:focus-visible {
+    color: var(--text-on-forest);
+  }
+  .site-header__cta {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 8px 18px;
+    border-radius: var(--btn-radius);
+    background: var(--gold-bright);
+    color: #1b1607;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-xs);
+    text-decoration: none;
+  }
+
+  @media (min-width: 640px) {
+    .site-header__nav {
+      display: flex;
+    }
+  }
+</style>

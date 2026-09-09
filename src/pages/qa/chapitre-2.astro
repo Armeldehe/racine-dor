@@ -1,0 +1,72 @@
+---
+import '../../styles/global.css';
+import ChapterMatiere from '../../components/ChapterMatiere.astro';
+import WhatsAppBar from '../../components/WhatsAppBar.astro';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>QA — Chapitre 2</title>
+  </head>
+  <body>
+    <main id="main">
+      <section class="qa-slug qa-slug--before">
+        <p>↓ Fait défiler pour entrer dans le Chapitre 2 ↓</p>
+      </section>
+      <ChapterMatiere />
+      <section class="qa-slug qa-slug--after">
+        <p>Fin du Chapitre 2 — suite du site normalement ici (Beurre, etc.)</p>
+      </section>
+    </main>
+    <div class="qa-readout" id="qaReadout">progress: —</div>
+    <WhatsAppBar />
+    <script src="../../scripts/main.ts"></script>
+    <script>
+      const readout = document.getElementById('qaReadout');
+      const wrapper = document.querySelector('[data-chapter-matiere]') as HTMLElement | null;
+      if (readout && wrapper) {
+        function tick() {
+          const rect = wrapper!.getBoundingClientRect();
+          const vh = window.innerHeight;
+          const span = rect.height - vh;
+          const p = span > 0 ? Math.min(1, Math.max(0, (0 - rect.top) / span)) : 0;
+          readout!.textContent = 'progress: ' + Math.round(p * 100) + '%';
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .qa-slug {
+    min-height: 60svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--gutter);
+    background: var(--ivoire);
+    color: var(--text-soft);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+  .qa-readout {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    background: rgba(10, 12, 8, 0.85);
+    color: #d9b968;
+    font-family: monospace;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+</style>

@@ -1,0 +1,182 @@
+---
+// Phase 8.3 — "Chapitre Beurre": matière / crème / nutrition / richesse.
+// Deliberately NOT the same compositional mechanic as SerumShowcase —
+// here two images layer (a macro texture ground + the jar emerging over
+// it) rather than one photo + a side text column, so the two chapters
+// read as genuinely different moments, not the same card twice.
+import { Image } from 'astro:assets';
+import butterTextureMacro from '../assets/img/butter-texture-macro.jpg';
+import butterCutout from '../assets/img/butter-cutout.png';
+import { PRODUCTS, BUTTER_INGREDIENTS, buildWhatsAppLink, greetingFor, priceToNumber } from '../config/site';
+
+const butter = PRODUCTS.butter;
+const message = greetingFor(butter.name, butter.price);
+const href = buildWhatsAppLink(message);
+const price = priceToNumber(butter.price);
+---
+
+<div
+  class="beurre-showcase"
+  data-cta-label={butter.ctaLabel}
+  data-cta-message={message}
+  data-cta-mode="contextual"
+  data-cta-track-source="butter"
+  data-cta-track-item="butter"
+  data-cta-track-item-type="product"
+  data-cta-track-price={price}
+>
+  <div class="beurre-showcase__frame">
+    <Image
+      src={butterTextureMacro}
+      alt=""
+      widths={[480, 800, 1100]}
+      sizes="100vw"
+      loading="lazy"
+      class="beurre-showcase__texture"
+      data-reveal
+    />
+    <Image
+      src={butterCutout}
+      alt="Pot de Beurre Rénovateur Racine d'Or, couvercle doré entrouvert, texture crémeuse visible"
+      widths={[240, 340, 460]}
+      sizes="(min-width: 900px) 340px, 62vw"
+      loading="lazy"
+      class="beurre-showcase__jar"
+      data-reveal
+      style="--i:1"
+    />
+  </div>
+
+  <div class="beurre-showcase__body">
+    <p class="beurre-showcase__eyebrow" data-reveal>Matière · nutrition profonde</p>
+    <h3 class="beurre-showcase__name" data-reveal style="--i:1">Beurre<br />Rénovateur</h3>
+    <p class="beurre-showcase__price" data-reveal style="--i:2">{butter.price}</p>
+    <p class="beurre-showcase__text" data-reveal style="--i:3">{butter.description}</p>
+    <p class="beurre-showcase__ingredients" data-reveal style="--i:4">{BUTTER_INGREDIENTS.join(' · ')}</p>
+    <a
+      class="beurre-showcase__cta"
+      data-reveal
+      style="--i:5"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track-source="butter"
+      data-track-item="butter"
+      data-track-item-type="product"
+      data-track-price={price}
+    >
+      Commander sur WhatsApp
+    </a>
+  </div>
+</div>
+
+<style>
+  .beurre-showcase {
+    position: relative;
+    background: var(--ivoire);
+    color: var(--text-on-ivory);
+    padding-top: 2vh;
+  }
+  .beurre-showcase__frame {
+    position: relative;
+    height: 52svh;
+    margin: 0 var(--gutter);
+    border-radius: 18px;
+    overflow: visible;
+  }
+  .beurre-showcase__texture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
+    border-radius: 18px;
+  }
+  .beurre-showcase__jar {
+    position: absolute;
+    right: -6%;
+    bottom: -14%;
+    width: min(56vw, 300px);
+    height: auto;
+    filter: drop-shadow(-12px 18px 30px rgba(40, 30, 10, 0.35));
+  }
+
+  .beurre-showcase__body {
+    position: relative;
+    padding: clamp(56px, 12vh, 88px) var(--gutter) clamp(48px, 9vh, 72px);
+    max-width: 620px;
+  }
+  .beurre-showcase__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .beurre-showcase__name {
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-hero);
+    line-height: var(--lh-display);
+  }
+  .beurre-showcase__price {
+    margin-top: 10px;
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+  }
+  .beurre-showcase__text {
+    margin-top: 16px;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--lh-body);
+    color: var(--text-muted-on-ivory);
+    max-width: 40ch;
+  }
+  .beurre-showcase__ingredients {
+    margin-top: 14px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-muted-on-ivory);
+  }
+  .beurre-showcase__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--btn-min-height);
+    margin-top: 24px;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--btn-radius);
+    background: var(--gold);
+    color: #1b1607;
+    font-family: var(--btn-font);
+    font-weight: var(--btn-font-weight);
+    font-size: var(--btn-font-size);
+    text-decoration: none;
+  }
+
+  .js-reveal .beurre-showcase__body [data-reveal] {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  @media (min-width: 900px) {
+    .beurre-showcase__frame {
+      float: right;
+      width: 46%;
+      height: 60svh;
+      margin: 0 var(--gutter) 24px 32px;
+      shape-outside: margin-box;
+    }
+    .beurre-showcase__body {
+      max-width: none;
+      padding-top: clamp(64px, 10vh, 96px);
+    }
+  }
+</style>

@@ -1,0 +1,234 @@
+---
+// Phase 8.4 — editorial sequence, not e-commerce cards: each routine's
+// own scale/typography/darkness communicates its place in the
+// progression (Routine Ciblée = précision, Duo Croissance = équilibre,
+// Booster = climax) rather than three equally-weighted boxes.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { buildWhatsAppLink, greetingFor, priceToNumber, type Kit } from '../config/site';
+
+interface Props {
+  kit: Kit;
+  image: ImageMetadata;
+  imgAlt: string;
+  index: number;
+}
+
+const { kit, image, imgAlt, index } = Astro.props;
+const message = greetingFor(kit.name, kit.price);
+const href = buildWhatsAppLink(message);
+// e.g. "routine-ciblee" -> "routine_ciblee", matching the analytics naming.
+const trackItem = kit.id.replace(/-/g, '_');
+const price = priceToNumber(kit.price);
+---
+
+<article
+  class="kit-card"
+  class:list={{ 'kit-card--featured': kit.featured, 'kit-card--duo': index === 1 }}
+  data-kit-card
+  data-kit-index={index}
+  data-kit-cta-label={kit.ctaLabel}
+  data-kit-cta-message={message}
+  data-kit-track-item={trackItem}
+  data-kit-track-price={price}
+>
+  <Image
+    src={image}
+    alt={imgAlt}
+    widths={[300, 420, 620]}
+    sizes="(min-width: 900px) 460px, 86vw"
+    loading="lazy"
+    class="kit-card__img"
+  />
+  <div class="kit-card__scrim" aria-hidden="true"></div>
+
+  <div class="kit-card__body">
+    <p class="kit-card__eyebrow">{kit.eyebrow}</p>
+    <h3 class="kit-card__name">{kit.name}</h3>
+    <p class="kit-card__contents">{kit.contents}</p>
+    <p class="kit-card__description">{kit.description}</p>
+    <p class="kit-card__price">{kit.price}</p>
+    <a
+      class="kit-card__cta"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track-source="routines"
+      data-track-item={trackItem}
+      data-track-item-type="kit"
+      data-track-price={price}
+    >
+      Commander sur WhatsApp
+    </a>
+  </div>
+</article>
+
+<style>
+  .kit-card {
+    position: relative;
+    flex: none;
+    width: min(82vw, 340px);
+    height: 72svh;
+    scroll-snap-align: center;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 450ms var(--ease), opacity 450ms var(--ease);
+  }
+  /* Dimmed/scaled-down "off focus" state only once JS + motion confirm a
+     working .is-active toggle exists (see kit-swipe.ts) — otherwise
+     (no-JS, reduced-motion) every card stays fully visible by default. */
+  .js-reveal .kit-card {
+    opacity: 0.68;
+    transform: scale(0.94);
+  }
+  .js-reveal .kit-card.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  /* Duo Croissance — slightly more presence than Routine Ciblée. */
+  .kit-card--duo {
+    width: min(85vw, 360px);
+    height: 76svh;
+  }
+  /* Booster — the climax: visibly larger, taller, wider than the other two. */
+  .kit-card--featured {
+    width: min(92vw, 410px);
+    height: 86svh;
+  }
+  .kit-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .kit-card__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(10, 12, 8, 0) 28%, rgba(10, 12, 8, 0.92) 100%);
+    pointer-events: none;
+  }
+  /* A darker, more forest-toned vignette around Booster specifically —
+     scale/lighting/typography communicate "climax", not restored cutouts. */
+  .kit-card--featured .kit-card__scrim {
+    background: radial-gradient(120% 90% at 50% 100%, rgba(10, 12, 8, 0.35) 0%, rgba(10, 12, 8, 0.4) 45%, rgba(10, 12, 8, 0.94) 100%),
+      linear-gradient(180deg, rgba(15, 18, 10, 0.18) 0%, rgba(10, 12, 8, 0) 30%, rgba(10, 12, 8, 0.92) 100%);
+  }
+
+  .kit-card__body {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 22px 22px 26px;
+    color: var(--text-on-forest);
+  }
+  .kit-card--featured .kit-card__body {
+    padding: 28px 26px 32px;
+  }
+  .kit-card__body > * {
+    transition: opacity 450ms var(--ease), transform 450ms var(--ease);
+  }
+  .js-reveal .kit-card__body > * {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .js-reveal .kit-card.is-active .kit-card__body > * {
+    opacity: 1;
+    transform: none;
+  }
+  .kit-card__body > *:nth-child(1) {
+    transition-delay: 60ms;
+  }
+  .kit-card__body > *:nth-child(2) {
+    transition-delay: 120ms;
+  }
+  .kit-card__body > *:nth-child(3) {
+    transition-delay: 180ms;
+  }
+  .kit-card__body > *:nth-child(4) {
+    transition-delay: 240ms;
+  }
+  .kit-card__body > *:nth-child(5) {
+    transition-delay: 300ms;
+  }
+  .kit-card__body > *:nth-child(6) {
+    transition-delay: 360ms;
+  }
+  .kit-card__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-gold);
+  }
+  .kit-card--featured .kit-card__eyebrow {
+    color: var(--gold-bright);
+  }
+  .kit-card__name {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-h3);
+    line-height: var(--lh-heading);
+  }
+  .kit-card--featured .kit-card__name {
+    font-size: clamp(2rem, 8.4vw, 2.6rem);
+  }
+  .kit-card__contents {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-muted-on-dark);
+    margin-top: 6px;
+  }
+  .kit-card__description {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: var(--lh-small);
+    color: var(--text-muted-on-dark);
+    margin-top: 10px;
+  }
+  .kit-card--featured .kit-card__description {
+    font-size: var(--text-body);
+  }
+  .kit-card__price {
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    font-size: 1.35rem;
+    margin-top: 12px;
+    color: var(--text-gold);
+  }
+  .kit-card--featured .kit-card__price {
+    font-size: 1.7rem;
+    color: var(--gold-bright);
+  }
+  .kit-card__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--btn-min-height);
+    text-align: center;
+    margin-top: 16px;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--btn-radius);
+    background: var(--text-on-forest);
+    color: #1b1607;
+    font-family: var(--btn-font);
+    font-weight: var(--btn-font-weight);
+    font-size: var(--btn-font-size);
+    text-decoration: none;
+  }
+  .kit-card--featured .kit-card__cta {
+    background: var(--gold-bright);
+    color: #1b1607;
+  }
+</style>

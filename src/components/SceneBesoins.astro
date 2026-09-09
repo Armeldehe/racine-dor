@@ -1,0 +1,103 @@
+---
+const options = [
+  { id: 'fragilises', label: 'Cheveux fragilisés' },
+  { id: 'casse', label: 'Casse' },
+  { id: 'clairsemees', label: 'Zones clairsemées' },
+  { id: 'pousse', label: 'Pousse lente' },
+];
+---
+
+<section id="besoins" class="besoins" data-cta-label="Commander" data-cta-mode="contextual" aria-labelledby="besoins-h">
+  <h2 id="besoins-h" class="besoins__title" data-reveal>De quoi tes cheveux<br />ont-ils besoin ?</h2>
+  <div class="besoins__list" role="group" aria-label="Choisis un besoin">
+    {
+      options.map((opt, i) => (
+        <button
+          type="button"
+          class="besoins__opt"
+          data-need-option={opt.id}
+          aria-pressed="false"
+          data-reveal
+          style={`--i:${i}`}
+        >
+          <span class="besoins__opt-label">{opt.label}</span>
+          <span class="besoins__opt-mark" aria-hidden="true">→</span>
+        </button>
+      ))
+    }
+  </div>
+  <p class="besoins__hint">Touche un besoin — il n'y a pas de mauvaise réponse.</p>
+</section>
+
+<style>
+  .besoins {
+    position: relative;
+    z-index: 1;
+    /* Pulled up to overlap the tail of Racine still visible above —
+       the transparent seam lets it show through instead of a hard cut. */
+    margin-top: -12vh;
+    padding: calc(clamp(64px, 14vh, 110px) + 12vh) var(--gutter) clamp(64px, 14vh, 110px);
+    background: linear-gradient(180deg, transparent 0%, #f1e4c6 12vh, #ead9ae 100%);
+    color: var(--umber);
+  }
+  .besoins__title {
+    font-size: clamp(1.6rem, 7vw, 2.6rem);
+    color: #241c0f;
+    text-wrap: balance;
+    max-width: 20ch;
+  }
+  .besoins__list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    border-top: 1px solid rgba(36, 28, 15, 0.18);
+  }
+  .besoins__opt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(36, 28, 15, 0.18);
+    color: #241c0f;
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 5vw, 1.7rem);
+    text-align: left;
+    padding: 20px 4px;
+    transition: padding-left var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .besoins__opt-mark {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+    flex: none;
+    margin-left: 16px;
+  }
+  .besoins__opt:hover,
+  .besoins__opt:focus-visible {
+    padding-left: 14px;
+  }
+  .besoins__opt:hover .besoins__opt-mark,
+  .besoins__opt:focus-visible .besoins__opt-mark,
+  .besoins__opt[aria-pressed='true'] .besoins__opt-mark {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .besoins__opt[aria-pressed='true'] {
+    color: var(--accent-strong);
+  }
+  .besoins__opt[aria-pressed='true'] .besoins__opt-label {
+    font-style: italic;
+  }
+  .js-reveal .besoins__opt[data-reveal] {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .besoins__hint {
+    margin-top: 24px;
+    font-size: 0.78rem;
+    opacity: 0.65;
+  }
+</style>

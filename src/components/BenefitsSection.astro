@@ -1,0 +1,131 @@
+---
+// Phase 8.3 — "Les racines d'abord" redesigned as a visual manifesto
+// (the bridge between the cinematic Opening Journey and the products),
+// not four icon-cards or a plain word list. Light data-reveal stagger
+// only (reveal.ts, unmodified), no sticky, no scroll hijacking, no new
+// frame sequence.
+//
+// Post-8.4 micro polish: removed the brand-roots-clean.jpg accent
+// fragment that used to bleed off the top-right corner — on mobile it
+// read as an arbitrarily-cropped afterthought competing with the title.
+// The section is now pure typography (eyebrow, title, lede, manifesto).
+const concepts = [
+  { word: 'Nourrir', desc: 'Apporter du soin à la matière.' },
+  { word: 'Fortifier', desc: 'Accompagner les cheveux fragilisés.' },
+  { word: 'Prendre soin', desc: 'Du cuir chevelu et des racines.' },
+  { word: 'Accompagner', desc: 'Une routine régulière, au quotidien.' },
+];
+---
+
+<section id="bienfaits" class="benefits" data-cta-label="Commander" data-cta-mode="compact" aria-labelledby="benefits-h">
+  <div class="benefits__intro">
+    <p class="benefits__eyebrow" data-reveal>La racine d'abord</p>
+    <h2 id="benefits-h" class="benefits__title" data-reveal style="--i:1">Tout commence<br />à la racine.</h2>
+    <p class="benefits__lede" data-reveal style="--i:2">
+      Une routine pensée pour nourrir, fortifier et prendre soin des cheveux et du cuir chevelu au
+      quotidien.
+    </p>
+  </div>
+
+  <ol class="benefits__manifesto">
+    {concepts.map((c, i) => (
+      <li class="benefits__row">
+        <span class="benefits__num" data-reveal style={`--i:${3 + i * 3}`} aria-hidden="true">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <span class="benefits__word" data-reveal style={`--i:${4 + i * 3}`}>{c.word}</span>
+        <span class="benefits__desc" data-reveal style={`--i:${5 + i * 3}`}>{c.desc}</span>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .benefits {
+    position: relative;
+    background: var(--ivoire);
+    color: var(--text-on-ivory);
+    /* Phase 8.1: top padding trimmed — stacked on top of TransitionBreath
+       it was reading as a long empty beat before the title ever arrived.
+       Phase 8.2.1: the trimmed value could dip below the fixed header's
+       own height, so the title could rest partly behind it at some
+       scroll positions — the floor is now pinned to header height + a
+       small margin, whatever the viewport. scroll-margin-top covers the
+       same case for any future anchor/scrollIntoView navigation here. */
+    padding: clamp(calc(var(--header-height) + 16px), 6vh, calc(var(--header-height) + 48px)) var(--gutter)
+      clamp(56px, 11vh, 100px);
+    overflow: hidden;
+    scroll-margin-top: calc(var(--header-height) + 12px);
+  }
+
+  .benefits__intro {
+    position: relative;
+    max-width: 660px;
+  }
+  .benefits__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .benefits__title {
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 9.5vw, 3.5rem);
+    line-height: var(--lh-display);
+    letter-spacing: -0.01em;
+  }
+  .benefits__lede {
+    margin-top: 20px;
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    line-height: var(--lh-body);
+    color: var(--text-muted-on-ivory);
+    max-width: 44ch;
+  }
+
+  .benefits__manifesto {
+    position: relative;
+    list-style: none;
+    margin: clamp(40px, 8vh, 76px) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .benefits__row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: clamp(14px, 4vw, 28px);
+    align-items: baseline;
+    padding: clamp(18px, 3.6vh, 28px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .benefits__num {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+  .benefits__word {
+    grid-column: 2;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 8vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .benefits__desc {
+    grid-column: 2;
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--text-muted-on-ivory);
+  }
+
+  .js-reveal .benefits [data-reveal] {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+</style>

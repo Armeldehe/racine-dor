@@ -1,0 +1,21 @@
+---
+// Phase 8 §5 — the handoff out of the Opening Journey. No new text (the
+// cinematic chapter already ends on "Nourrir en profondeur."), no new
+// engine: a single gradient panel from the Journey's dark ground toward
+// the ivoire of the sections that follow. Scrolling through it is itself
+// the "progressive" reveal — no scroll-linked JS needed.
+//
+// Phase 8.1: shortened from 46svh — human QA read the original height
+// (combined with Benefits' own top padding) as a near-empty screen
+// between the Journey and "Tout commence à la racine." This is a raccord,
+// not a section: it should read as a beat, not a stop.
+---
+
+<div class="transition-breath" aria-hidden="true"></div>
+
+<style>
+  .transition-breath {
+    height: 24svh;
+    background: linear-gradient(180deg, var(--forest-deep) 0%, var(--ivoire) 100%);
+  }
+</style>

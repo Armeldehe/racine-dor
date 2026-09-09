@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import OpeningJourney from '../components/OpeningJourney.astro';
+import TransitionBreath from '../components/TransitionBreath.astro';
+import BenefitsSection from '../components/BenefitsSection.astro';
+import ProductsSection from '../components/ProductsSection.astro';
+import SceneRoutines from '../components/SceneRoutines.astro';
+import SceneAssistant from '../components/SceneAssistant.astro';
+import SceneRituel from '../components/SceneRituel.astro';
+import SceneMarque from '../components/SceneMarque.astro';
+import SceneFinalCTA from '../components/SceneFinalCTA.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import WhatsAppBar from '../components/WhatsAppBar.astro';
+---
+
+<BaseLayout
+  title="Racine d'Or — Soins capillaires pour tes racines"
+  description="Sérum, beurre rénovateur et routines capillaires Racine d'Or, pensés pour nourrir, fortifier et prendre soin de tes racines. Conçu en Côte d'Ivoire."
+>
+  <SiteHeader />
+  <main id="main">
+    <OpeningJourney />
+    <TransitionBreath />
+    <BenefitsSection />
+    <ProductsSection />
+    <SceneRoutines />
+    <SceneAssistant />
+    <SceneRituel />
+    <SceneFinalCTA />
+    <SceneMarque />
+  </main>
+  <SiteFooter />
+  <WhatsAppBar />
+  <script src="../scripts/main.ts"></script>
+</BaseLayout>

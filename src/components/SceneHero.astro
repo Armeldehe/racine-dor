@@ -1,0 +1,163 @@
+---
+import { Image } from 'astro:assets';
+import serumHeroMobile from '../assets/img/serum-hero-mobile.jpg';
+---
+
+<section
+  id="hero"
+  class="hero"
+  data-drop-wrapper
+  data-cta-label="Commander"
+  data-cta-mode="hidden"
+  aria-label="Racine d'Or"
+>
+  <Image
+    src={serumHeroMobile}
+    alt="Sérum Capillaire Fortifiant Racine d'Or, flacon ambré posé sur une composition botanique en lumière chaude"
+    widths={[420, 700, 941]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="hero__img"
+  />
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <svg class="hero__drop" data-drop viewBox="0 0 20 26" aria-hidden="true" focusable="false">
+    <path fill="#d9b968" d="M10 0c4 6 8 11.2 8 16.5A8 8 0 1 1 2 16.5C2 11.2 6 6 10 0Z"></path>
+  </svg>
+
+  <div class="hero__content" data-hero-content>
+    <p class="hero__brand hero__reveal" style="--d:0s">Racine d'Or</p>
+    <p class="hero__quote hero__reveal" style="--d:.15s">
+      « Chaque goutte est un soin<br />précieux pour tes racines. »
+    </p>
+    <a class="hero__cta hero__reveal" style="--d:.3s" href="#racine">
+      Découvrir ma routine
+      <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--forest-deep);
+  }
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 38%;
+    z-index: 0;
+    transform-origin: 50% 42%;
+    animation: rd-hero-enter 2.6s var(--ease) both, rd-hero-breathe 15s ease-in-out 2.6s infinite;
+    pointer-events: none;
+  }
+  @keyframes rd-hero-enter {
+    from {
+      transform: scale(1.09);
+    }
+    to {
+      transform: scale(1.02);
+    }
+  }
+  @keyframes rd-hero-breathe {
+    0%,
+    100% {
+      transform: scale(1.02);
+    }
+    50% {
+      transform: scale(1.045);
+    }
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 18, 10, 0.22) 0%,
+      rgba(15, 18, 10, 0) 34%,
+      rgba(15, 18, 10, 0) 54%,
+      rgba(15, 18, 10, 0.86) 100%
+    );
+    pointer-events: none;
+  }
+  .hero__drop {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 18px;
+    height: auto;
+    transform: translateX(-50%);
+    z-index: 2;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+    pointer-events: none;
+  }
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    max-width: 640px;
+  }
+  .hero__reveal {
+    animation: rd-hero-rise 900ms var(--ease) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes rd-hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .hero__brand {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 9vw, 3.4rem);
+    line-height: 1;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .hero__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 4.4vw, 1.6rem);
+    line-height: 1.4;
+    text-wrap: balance;
+    opacity: 0.94;
+  }
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 26px;
+    padding: 12px 18px;
+    border: 1.5px solid rgba(244, 238, 220, 0.7);
+    border-radius: 100px;
+    color: var(--text-on-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.82rem;
+    opacity: 0.92;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__img {
+      animation: none;
+      transform: none;
+    }
+  }
+</style>

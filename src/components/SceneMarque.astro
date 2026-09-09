@@ -1,0 +1,141 @@
+---
+// Brand Story — official content, philosophy first, then the roots
+// photograph + quote as the site's actual closing visual (Footer follows
+// immediately after this).
+//
+// Post-8.4 reorder: this used to be photo-then-text; the client asked
+// for text-then-photo instead, so the roots image is the very last big
+// visual moment before Footer, not something the reader passes early.
+// The Phase 8.4 mask (built for "photo emerges from Final CTA's
+// darkness", i.e. transparent-at-top) no longer applies now that ivoire
+// text precedes the photo instead of a dark section — replaced with a
+// simple top ivoire-fade (text → image) and a bottom dark-fade toward
+// Footer's forest-deep ground (image → Footer) instead.
+import { Image } from 'astro:assets';
+import brandRootsClean from '../assets/img/brand-roots-clean.jpg';
+---
+
+<section id="marque" class="marque" data-cta-label="Commander" data-cta-mode="hidden" aria-labelledby="marque-h">
+  <div class="marque__body">
+    <p data-reveal style="--i:1">
+      Racine d'Or est une marque de soins capillaires pensée pour accompagner celles et ceux qui
+      souhaitent prendre davantage soin de leurs cheveux et de leur cuir chevelu.
+    </p>
+    <p data-reveal style="--i:2">
+      À travers des soins inspirés de la richesse des ingrédients naturels, Racine d'Or propose des
+      routines simples et accessibles pour nourrir, fortifier et prendre soin des racines au quotidien.
+    </p>
+    <p class="marque__vision" data-reveal style="--i:3">
+      Notre vision est simple : offrir des soins qui s'intègrent facilement dans une routine capillaire
+      régulière, tout en accordant une attention particulière aux zones fragilisées et aux cheveux qui
+      ont besoin de plus de soin.
+    </p>
+    <p data-reveal style="--i:4">
+      Chez Racine d'Or, nous croyons qu'une belle chevelure commence par des racines bien entretenues.
+    </p>
+  </div>
+
+  <div class="marque__photo">
+    <Image
+      src={brandRootsClean}
+      alt="Racines, karité et gingembre au pied d'un arbre, lumière dorée"
+      widths={[480, 800, 1200]}
+      sizes="100vw"
+      loading="lazy"
+      class="marque__img"
+    />
+    <div class="marque__scrim-top" aria-hidden="true"></div>
+    <div class="marque__scrim-bottom" aria-hidden="true"></div>
+    <h2 id="marque-h" class="marque__quote" data-reveal>
+      « Racine d'Or, parce que la beauté des cheveux<br />commence par la racine. »
+    </h2>
+  </div>
+</section>
+
+<style>
+  .marque {
+    position: relative;
+    /* A short gradient cap — not touching Final CTA itself — so its dark
+       ending doesn't cut instantly into this section's ivoire ground. */
+    background: linear-gradient(180deg, var(--forest-deep) 0%, var(--ivoire) 70px);
+    color: var(--text-on-ivory);
+  }
+  .marque__body {
+    padding: clamp(48px, 9vh, 88px) var(--gutter) clamp(40px, 7vh, 64px);
+    max-width: 62ch;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .marque__body p {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--lh-body);
+    color: var(--text-muted-on-ivory);
+  }
+  .marque__vision {
+    color: var(--text-on-ivory);
+    font-weight: 600;
+  }
+
+  /* The site's final big visual moment — full-bleed, no side margin, no
+     card treatment. */
+  .marque__photo {
+    position: relative;
+    height: 76svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .marque__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 28% 50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* Text -> image: a simple, short ivoire fade so the photo doesn't start
+     on a hard edge right under the paragraphs. */
+  .marque__scrim-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 12%;
+    z-index: 1;
+    background: linear-gradient(180deg, var(--ivoire) 0%, rgba(245, 239, 222, 0) 100%);
+    pointer-events: none;
+  }
+  /* Image -> Footer: darkens progressively toward Footer's forest-deep
+     ground, so Footer reads as emerging from the photograph rather than
+     a new rectangle starting — and doubles as the quote's contrast scrim. */
+  .marque__scrim-bottom {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(10, 12, 8, 0) 42%, rgba(10, 12, 8, 0.95) 100%);
+    pointer-events: none;
+  }
+  .marque__quote {
+    position: relative;
+    z-index: 2;
+    padding: var(--gutter);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+    line-height: 1.35;
+    text-wrap: balance;
+    color: var(--text-on-forest);
+    max-width: 620px;
+  }
+
+  .js-reveal .marque__body [data-reveal] {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+</style>

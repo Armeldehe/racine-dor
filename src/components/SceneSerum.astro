@@ -1,0 +1,170 @@
+---
+import { Image } from 'astro:assets';
+import serumCutout from '../assets/img/serum-cutout.png';
+import { PRODUCTS, SERUM_DISCOVER_LABEL, SERUM_DISCOVER_MESSAGE } from '../config/site';
+
+const serum100 = PRODUCTS.serum100;
+const serum50 = PRODUCTS.serum50;
+---
+
+<section
+  id="serum"
+  class="serum"
+  data-serum-wrapper
+  data-cta-label={SERUM_DISCOVER_LABEL}
+  data-cta-message={SERUM_DISCOVER_MESSAGE}
+  data-cta-mode="contextual"
+  aria-labelledby="serum-h"
+>
+  <h2 id="serum-h" class="visually-hidden">Le Sérum Capillaire Fortifiant</h2>
+
+  <div class="serum__product" data-serum-product>
+    <Image
+      src={serumCutout}
+      alt="Sérum Capillaire Fortifiant Racine d'Or, flacon détouré"
+      widths={[320, 480, 640]}
+      sizes="(min-width: 900px) 480px, 82vw"
+      loading="lazy"
+      class="serum__img"
+    />
+  </div>
+
+  <ul class="serum__words" aria-hidden="true">
+    <li data-reveal style="--i:0">NOURRIR</li>
+    <li data-reveal style="--i:1">FORTIFIER</li>
+    <li data-reveal style="--i:2">ACCOMPAGNER</li>
+  </ul>
+
+  <div class="serum__info">
+    <div class="serum__toggle" role="radiogroup" aria-label="Format du sérum">
+      <input type="radio" name="serum-size" id="serum-size-50" class="serum__radio" data-serum-size="50" checked />
+      <label for="serum-size-50" class="serum__pill">50 ml</label>
+      <input type="radio" name="serum-size" id="serum-size-100" class="serum__radio" data-serum-size="100" />
+      <label for="serum-size-100" class="serum__pill">100 ml</label>
+
+      <p class="serum__panel serum__panel--50">{serum50.price ?? 'Prix à venir'}</p>
+      <p class="serum__panel serum__panel--100">{serum100.price}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .serum {
+    position: relative;
+    z-index: 1;
+    /* Pulled up to overlap Besoins' tail — the bottle appears while the
+       last need is still scrolling away above it. */
+    margin-top: -12vh;
+    min-height: 100svh;
+    background: linear-gradient(180deg, transparent 0%, #2c3620 12vh, #171c11 58%, #171c11 100%);
+    color: var(--text-on-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Only half-compensated on purpose: the product sits partly inside
+       the transparent seam, so it appears while Besoins is still
+       finishing — it becomes the visual bridge, per Phase 5 §5. */
+    padding: calc(clamp(40px, 8vh, 80px) + 6vh) var(--gutter) clamp(40px, 8vh, 80px);
+    padding-bottom: calc(clamp(40px, 8vh, 80px) + var(--bar-clearance));
+    overflow: hidden;
+  }
+  .serum__product {
+    align-self: center;
+    width: min(78vw, 460px);
+    will-change: transform;
+  }
+  .serum__img {
+    width: 100%;
+    height: auto;
+    animation: rd-float 7s ease-in-out infinite;
+  }
+  @keyframes rd-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  .serum__words {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .serum__words li {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 11vw, 3.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+  .serum__words li:nth-child(1) {
+    color: var(--gold-bright);
+  }
+  .serum__words li:nth-child(2) {
+    opacity: 0.62;
+  }
+  .serum__words li:nth-child(3) {
+    /* Longest word: sized down so it can never clip at narrow widths —
+       it is already the visually-receding, lowest-emphasis word. */
+    font-size: clamp(1.4rem, 8vw, 2.6rem);
+    opacity: 0.32;
+  }
+  .js-reveal .serum__words li[data-reveal] {
+    transition-delay: calc(var(--i, 0) * 140ms);
+  }
+
+  .serum__info {
+    margin-top: 32px;
+  }
+  .serum__toggle {
+    position: relative;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .serum__radio {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .serum__pill {
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(244, 238, 220, 0.4);
+    color: var(--text-on-dark-soft);
+  }
+  .serum__radio:checked + .serum__pill {
+    background: var(--text-on-dark);
+    color: #20261a;
+  }
+  .serum__radio:focus-visible + .serum__pill {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .serum__panel {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 10px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    font-size: 1.05rem;
+    display: none;
+    white-space: nowrap;
+  }
+  #serum-size-50:checked ~ .serum__panel--50 {
+    display: block;
+  }
+  #serum-size-100:checked ~ .serum__panel--100 {
+    display: block;
+    color: var(--gold-bright);
+  }
+</style>

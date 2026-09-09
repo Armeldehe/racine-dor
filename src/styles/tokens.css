@@ -1,0 +1,108 @@
+/*
+  Racine d'Or — design tokens
+  Fixed brand identity (Phase 1/2): the site does not follow the visitor's
+  OS light/dark preference — "jour" and "nuit" are storytelling states
+  authored per scene, not a user-toggled theme.
+*/
+:root {
+  /* surfaces */
+  --ivoire: #f5efde;
+  --ivoire-deep: #ece3cb;
+  --surface: #fcf9ef;
+
+  /* text (role-based — never reach for a literal #fff/#000/#777 in a
+     component; pick the token for the ground it sits on instead) */
+  --text: #1c2117;
+  --text-soft: #565e4a;
+  --text-on-dark: #f4eedc;
+  --text-on-dark-soft: rgba(244, 238, 220, 0.72);
+  /* Phase 8.2 — semantic aliases so a component reads by surface, not by
+     the literal color: on-ivoire == --text, on-forest == --text-on-dark.
+     A dedicated muted-on-ivoire is deliberately a shade darker than
+     --text-soft's original use — some spots that reused --text-soft for
+     body copy (not just captions) read too pale on cream. */
+  --text-on-ivory: var(--text);
+  --text-on-forest: var(--text-on-dark);
+  --text-muted-on-ivory: #3f4636;
+  --text-muted-on-dark: var(--text-on-dark-soft);
+  --text-gold: var(--gold-bright);
+
+  /* brand accents */
+  --accent: #5c6b42;
+  --accent-strong: #3e4a2a;
+  --gold: #a8853b;
+  --gold-bright: #d9b968;
+  --umber: #4a2c18;
+
+  /* "nuit" scene grounds */
+  --forest: #232b1c;
+  --forest-deep: #171c11;
+
+  /* lines */
+  --line: rgba(28, 33, 23, 0.14);
+  --line-strong: rgba(28, 33, 23, 0.28);
+  --line-on-dark: rgba(244, 238, 220, 0.18);
+
+  /* type — Fraunces (display) for Hero/H1-H2/quotes/editorial moments;
+     Manrope (body) for everything functional: body copy, nav, price,
+     CTA, labels, helper text. Never Fraunces for small functional text. */
+  --font-serif: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-serif);
+  --font-body: var(--font-sans);
+
+  /* scale (fluid, mobile -> desktop; capped so desktop never runs away) */
+  --fs-display: clamp(2rem, 6vw, 3.6rem);
+  --fs-h1: clamp(1.6rem, 4.6vw, 2.6rem);
+  --fs-h2: clamp(1.3rem, 3.4vw, 1.9rem);
+  --fs-body: clamp(0.95rem, 2vw, 1.05rem);
+  --fs-small: clamp(0.8rem, 1.6vw, 0.9rem);
+
+  /* Phase 8.2 — typographic role tokens. Body/helper text never drops
+     below ~14px on mobile; text people actually need (prices, CTAs,
+     descriptions) sits at 16px+. */
+  --text-xs: clamp(0.75rem, 2.6vw, 0.8rem);
+  /* ~12–13px */
+  --text-sm: clamp(0.85rem, 3vw, 0.95rem);
+  /* ~13.5–15px */
+  --text-body: clamp(1rem, 3.6vw, 1.05rem);
+  /* ~16–17px */
+  --text-lg: clamp(1.05rem, 4vw, 1.2rem);
+  /* ~17–19px */
+  --text-h3: clamp(1.5rem, 6vw, 2rem);
+  --text-h2: clamp(2rem, 8vw, 3rem);
+  --text-hero: clamp(2.2rem, 10vw, 3.8rem);
+
+  /* line-height roles */
+  --lh-display: 1.05;
+  --lh-heading: 1.15;
+  --lh-body: 1.55;
+  --lh-small: 1.4;
+
+  /* button system — every CTA (primary/secondary/text-link) draws its
+     size/radius/font from here so they read as one family. */
+  --btn-radius: 100px;
+  --btn-font: var(--font-body);
+  --btn-font-weight: 700;
+  --btn-font-size: var(--text-sm);
+  --btn-padding-y: 15px;
+  --btn-padding-x: 26px;
+  --btn-min-height: 46px;
+
+  /* layout */
+  --gutter: clamp(20px, 6vw, 48px);
+  --radius: 6px;
+  /* Space to keep clear above the fixed WhatsApp bar so it never
+     overlaps a section's own bottom-anchored content. */
+  --bar-clearance: 88px;
+  /* SiteHeader.astro's real rendered height (measured, constant across
+     breakpoints) — used as a scroll-margin-top offset so a section's own
+     heading never rests underneath the fixed header. */
+  --header-height: 60px;
+
+  /* motion (respected/overridden by prefers-reduced-motion in global.css) */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur-med: 500ms;
+  --dur-slow: 900ms;
+}

@@ -1,0 +1,200 @@
+---
+// Chapter 2 — "Sérum → Applicateur → Goutte → Matière → Beurre".
+// One sticky stage, one continuous scroll-scrubbed progression. Every
+// layer below is position:absolute inset:0 inside the same viewport —
+// nothing here is "a section", it is one scene transforming. It hands
+// off to the existing <SceneBeurre> (untouched) for the full arrival
+// shot once the pot has emerged from the texture.
+import { Image } from 'astro:assets';
+import serumCutout from '../assets/img/serum-cutout.png';
+import serumDropMacro from '../assets/img/serum-drop-macro.jpg';
+import butterTextureMacro from '../assets/img/butter-texture-macro.jpg';
+import butterCutout from '../assets/img/butter-cutout.png';
+---
+
+<div
+  class="matiere"
+  data-chapter-matiere
+  data-cta-label="Commander"
+  data-cta-mode="compact"
+  aria-hidden="true"
+>
+  <div class="matiere__stage">
+    <!-- background wash: three stacked colour fields, cross-fading -->
+    <div class="matiere__layer matiere__wash matiere__wash--forest" data-layer="wash-forest"></div>
+    <div class="matiere__layer matiere__wash matiere__wash--amber" data-layer="wash-amber"></div>
+    <div class="matiere__layer matiere__wash matiere__wash--ivoire" data-layer="wash-ivoire"></div>
+
+    <!-- graphic words, sit behind the product so it can pass in front -->
+    <ul class="matiere__words" data-layer="words" aria-hidden="true">
+      <li data-word="1">NOURRIR</li>
+      <li data-word="2">FORTIFIER</li>
+      <li data-word="3">ACCOMPAGNER</li>
+    </ul>
+
+    <!-- the serum bottle itself: scales toward its own applicator -->
+    <Image
+      src={serumCutout}
+      alt=""
+      widths={[320, 480, 640]}
+      sizes="70vw"
+      loading="lazy"
+      class="matiere__layer matiere__product"
+      data-layer="serum"
+    />
+
+    <!-- macro applicator + droplet: continues the zoom as a real photo -->
+    <Image
+      src={serumDropMacro}
+      alt=""
+      widths={[480, 800]}
+      sizes="100vw"
+      loading="lazy"
+      class="matiere__layer matiere__drop-macro"
+      data-layer="drop-macro"
+    />
+
+    <!-- golden circular reveal: liquid becomes cream inside the droplet -->
+    <div class="matiere__mask-wrap" data-layer="mask-wrap">
+      <Image
+        src={butterTextureMacro}
+        alt=""
+        widths={[480, 800]}
+        sizes="100vw"
+        loading="lazy"
+        class="matiere__layer matiere__butter-texture"
+      />
+    </div>
+    <div class="matiere__gold-ring" data-layer="gold-ring" aria-hidden="true"></div>
+
+    <!-- the jar emerges from the texture -->
+    <Image
+      src={butterCutout}
+      alt=""
+      widths={[220, 320, 420]}
+      sizes="55vw"
+      loading="lazy"
+      class="matiere__layer matiere__butter-cutout"
+      data-layer="butter-cutout"
+    />
+  </div>
+</div>
+
+<style>
+  .matiere {
+    position: relative;
+    height: 380svh;
+    background: #171c11;
+    pointer-events: none;
+  }
+  .matiere__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .matiere__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .matiere__wash {
+    z-index: 0;
+  }
+  .matiere__wash--forest {
+    background: radial-gradient(120% 90% at 50% 15%, #2c3620 0%, #171c11 65%);
+  }
+  .matiere__wash--amber {
+    background: linear-gradient(180deg, #2c2013 0%, #4a2c18 100%);
+    opacity: 0;
+  }
+  .matiere__wash--ivoire {
+    background: linear-gradient(180deg, #ead9ae 0%, #f1e4c6 100%);
+    opacity: 0;
+  }
+
+  .matiere__words {
+    z-index: 1;
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    opacity: 0;
+  }
+  .matiere__words li {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 13vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--text-on-dark);
+  }
+  .matiere__words li[data-word='1'] {
+    color: var(--gold-bright);
+  }
+  .matiere__words li[data-word='2'] {
+    opacity: 0.62;
+  }
+  .matiere__words li[data-word='3'] {
+    font-size: clamp(1.4rem, 8vw, 2.6rem);
+    opacity: 0.32;
+  }
+
+  .matiere__product {
+    z-index: 2;
+    object-fit: contain;
+    top: 19%;
+    left: 19%;
+    width: 62%;
+    height: 62%;
+    transform-origin: 50% 22%;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45));
+  }
+
+  .matiere__drop-macro {
+    z-index: 3;
+    object-position: 50% 42%;
+    transform-origin: 50% 55%;
+    opacity: 0;
+  }
+
+  .matiere__mask-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    clip-path: circle(0% at 50% 55%);
+  }
+  .matiere__butter-texture {
+    transform: scale(1.08);
+  }
+  .matiere__gold-ring {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 55%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    border: 3px solid var(--gold-bright);
+    box-shadow: 0 0 24px 4px rgba(217, 185, 104, 0.5);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+
+  .matiere__butter-cutout {
+    z-index: 6;
+    object-fit: contain;
+    top: 23%;
+    left: 23%;
+    width: 54%;
+    height: 54%;
+    opacity: 0;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+  }
+</style>

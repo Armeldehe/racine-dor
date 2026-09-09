@@ -1,0 +1,79 @@
+---
+/**
+ * No real testimonials exist yet. Per the brief: never fabricate names,
+ * quotes, photos, before/afters or stats — and never show a lorem-ipsum
+ * placeholder either. So this section renders nothing until real
+ * `testimonials` are passed in from src/pages/index.astro, at which point
+ * it appears automatically between Rituel and Marque — no other change
+ * needed.
+ */
+export interface Testimonial {
+  name: string;
+  location: string;
+  quote: string;
+}
+
+interface Props {
+  testimonials?: Testimonial[];
+}
+
+const { testimonials = [] } = Astro.props;
+---
+
+{
+  testimonials.length > 0 && (
+    <section id="preuve" class="preuve" data-cta-label="Commander" aria-labelledby="preuve-h">
+      <h2 id="preuve-h" class="preuve__title">Ils utilisent déjà Racine d'Or</h2>
+      <ul class="preuve__list">
+        {testimonials.map((t) => (
+          <li class="preuve__card">
+            <p class="preuve__quote">“{t.quote}”</p>
+            <p class="preuve__name">
+              {t.name} · {t.location}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .preuve {
+    padding: clamp(56px, 12vh, 100px) var(--gutter);
+    background: var(--surface);
+  }
+  .preuve__title {
+    text-align: center;
+    font-size: clamp(1.3rem, 5vw, 1.9rem);
+    margin-bottom: 30px;
+  }
+  .preuve__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+  @media (min-width: 720px) {
+    .preuve__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .preuve__card {
+    border: 1px solid var(--line);
+    padding: 20px;
+    border-radius: var(--radius);
+  }
+  .preuve__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  .preuve__name {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+  }
+</style>

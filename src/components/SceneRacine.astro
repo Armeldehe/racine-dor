@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import brandRootsClean from '../assets/img/brand-roots-clean.jpg';
+---
+
+<section
+  id="racine"
+  class="racine"
+  data-racine-wrapper
+  data-cta-label="Commander"
+  data-cta-mode="compact"
+  aria-label="Tout commence à la racine"
+>
+  <div class="racine__sticky">
+    <Image
+      src={brandRootsClean}
+      alt="Racines d'arbre, gouttes d'huile dorée et ingrédients botaniques (karité, gingembre) au sol"
+      widths={[480, 800, 1200]}
+      sizes="100vw"
+      loading="lazy"
+      class="racine__img"
+      data-racine-img
+    />
+    <div class="racine__scrim" aria-hidden="true"></div>
+    <div class="racine__content">
+      <p class="racine__line" data-reveal>Une belle chevelure commence<br />là où on ne la voit pas.</p>
+      <p class="racine__line racine__line--em" data-reveal style="--i:1">Tout commence à la racine.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .racine {
+    position: relative;
+    height: 135svh;
+    background: var(--forest-deep);
+  }
+  .racine__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .racine__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 65% 58%;
+    z-index: 0;
+    transform: scale(1);
+    will-change: transform;
+    pointer-events: none;
+  }
+  .racine__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 14, 8, 0.55) 0%,
+      rgba(10, 14, 8, 0.25) 45%,
+      rgba(10, 14, 8, 0.6) 100%
+    );
+    pointer-events: none;
+  }
+  .racine__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: var(--gutter);
+    color: var(--text-on-dark);
+  }
+  .racine__line {
+    font-family: var(--font-serif);
+    font-size: clamp(1.3rem, 5.6vw, 2.3rem);
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+  .racine__line--em {
+    margin-top: 22px;
+    font-style: italic;
+    color: var(--gold-bright);
+    font-size: clamp(1.6rem, 7.2vw, 3rem);
+  }
+  .js-reveal .racine__line[data-reveal] {
+    transition-delay: calc(var(--i, 0) * 250ms);
+  }
+</style>

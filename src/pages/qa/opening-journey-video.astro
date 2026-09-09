@@ -1,0 +1,78 @@
+---
+// Phase 7.1 comparison reference — original video.currentTime-scrub
+// engine. See /qa/opening-journey for the live frame-sequence version.
+import '../../styles/global.css';
+import OpeningJourneyVideo from '../../components/OpeningJourneyVideo.astro';
+import WhatsAppBar from '../../components/WhatsAppBar.astro';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>QA — Opening Journey (video-scrub reference)</title>
+  </head>
+  <body>
+    <main id="main">
+      <section class="qa-slug qa-slug--before">
+        <p>↓ Référence: moteur video.currentTime (avant Phase 7.1) ↓</p>
+      </section>
+      <OpeningJourneyVideo />
+      <section class="qa-slug qa-slug--after" data-cta-label="Commander" data-cta-mode="contextual" id="opening-journey-end">
+        <p>Fin de l'Opening Journey — suite du site normalement ici (catalogue, routines, etc.)</p>
+      </section>
+    </main>
+    <div class="qa-readout" id="qaReadout">— / —</div>
+    <WhatsAppBar />
+    <script src="../../scripts/main-opening-journey-video.ts"></script>
+    <script>
+      const readout = document.getElementById('qaReadout');
+      const wrapper = document.querySelector('[data-opening-journey]') as HTMLElement | null;
+      if (readout && wrapper) {
+        function tick() {
+          const progress = Number(wrapper!.getAttribute('data-progress') || '0');
+          const mode = wrapper!.getAttribute('data-mode') || '—';
+          const serumTime = Number(wrapper!.getAttribute('data-serum-time') || '0');
+          const butterTime = Number(wrapper!.getAttribute('data-butter-time') || '0');
+          readout!.textContent =
+            'PROGRESS: ' + Math.round(progress * 100) + '%  ·  MODE: ' + mode +
+            '  ·  SERUM: ' + serumTime.toFixed(2) + 's' +
+            '  ·  BUTTER: ' + butterTime.toFixed(2) + 's';
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .qa-slug {
+    min-height: 60svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--gutter);
+    background: var(--ivoire);
+    color: var(--text-soft);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+  .qa-readout {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    background: rgba(10, 12, 8, 0.85);
+    color: #d9b968;
+    font-family: monospace;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+</style>

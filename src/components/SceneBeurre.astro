@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import butterOpenHero from '../assets/img/butter-open-hero.jpg';
+import butterCutout from '../assets/img/butter-cutout.png';
+import { PRODUCTS } from '../config/site';
+
+const butter = PRODUCTS.butter;
+const ingredients = ['Karité', 'Chanvre', 'Ricin', 'Gingembre', 'Girofle'];
+---
+
+<section id="beurre" class="beurre" data-cta-label={butter.ctaLabel} data-cta-mode="contextual" aria-labelledby="beurre-h">
+  <Image
+    src={butterOpenHero}
+    alt="Pot de Beurre Rénovateur ouvert, couvercle doré posé à côté, texture crémeuse visible"
+    widths={[480, 800, 1100]}
+    sizes="100vw"
+    loading="lazy"
+    class="beurre__bg"
+  />
+  <div class="beurre__scrim" aria-hidden="true"></div>
+
+  <Image
+    src={butterCutout}
+    alt=""
+    widths={[220, 320, 420]}
+    sizes="(min-width: 900px) 320px, 58vw"
+    loading="lazy"
+    class="beurre__emerge"
+    data-reveal
+  />
+
+  <div class="beurre__content">
+    <h2 id="beurre-h" class="beurre__title">Nourrir.<br />Fortifier.<br />Protéger.</h2>
+    <p class="beurre__ingredients">
+      {ingredients.join(' · ')}
+    </p>
+  </div>
+</section>
+
+<style>
+  .beurre {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+    background: #f1e4c6;
+  }
+  .beurre__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .beurre__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(30, 24, 10, 0) 34%, rgba(30, 24, 10, 0.65) 100%);
+    pointer-events: none;
+  }
+  .beurre__emerge {
+    position: absolute;
+    right: -8%;
+    bottom: 8%;
+    width: min(58vw, 340px);
+    height: auto;
+    z-index: 1;
+    filter: drop-shadow(-10px 16px 26px rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+  }
+  /* The continuous float only starts once the entrance reveal has run,
+     so it never fights the [data-reveal] transform transition. */
+  .js-reveal .beurre__emerge.is-visible {
+    animation: rd-float-alt 9s ease-in-out infinite;
+  }
+  @keyframes rd-float-alt {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-16px) rotate(1deg);
+    }
+  }
+  .beurre__content {
+    position: relative;
+    z-index: 2;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+  }
+  .beurre__title {
+    font-size: clamp(2.2rem, 11vw, 4rem);
+    line-height: 1;
+  }
+  .beurre__ingredients {
+    margin: 20px 0 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-soft);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  }
+</style>

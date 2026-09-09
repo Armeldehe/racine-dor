@@ -1,0 +1,44 @@
+---
+// Phase 8.3 — "Nos soins" is now two distinct editorial chapters rather
+// than two product cards. See SerumShowcase.astro / BeurreShowcase.astro
+// for each chapter's own (deliberately different) composition.
+import SerumShowcase from './SerumShowcase.astro';
+import BeurreShowcase from './BeurreShowcase.astro';
+---
+
+<section id="soins" class="products" aria-labelledby="products-h">
+  <div class="products__intro">
+    <h2 id="products-h" class="products__title" data-reveal>Nos soins.</h2>
+    <p class="products__lede" data-reveal style="--i:1">L'essentiel pour prendre soin de tes racines.</p>
+  </div>
+
+  <SerumShowcase />
+  <BeurreShowcase />
+</section>
+
+<style>
+  .products {
+    position: relative;
+  }
+  .products__intro {
+    background: var(--ivoire);
+    color: var(--text-on-ivory);
+    padding: 0 var(--gutter) clamp(40px, 8vh, 72px);
+  }
+  .products__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--lh-display);
+  }
+  .products__lede {
+    margin-top: 12px;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--lh-body);
+    color: var(--text-muted-on-ivory);
+  }
+  .js-reveal .products__lede[data-reveal] {
+    transition-delay: calc(var(--i, 0) * 100ms);
+  }
+</style>

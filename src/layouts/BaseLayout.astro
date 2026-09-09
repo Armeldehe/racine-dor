@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute-ified against astro.config.mjs's `site`. Defaults to the
+   * Phase 9.2 brand social image (ivory ground, real Racine d'Or logo). */
+  ogImage?: string;
+}
+
+const { title, description, ogImage = '/og-image.jpg' } = Astro.props;
+
+// Phase 9.2 §6 — astro.config.mjs's `site` is the single source of truth
+// for every absolute URL this layout emits (canonical, og:url, og:image,
+// twitter:image, structured data). It is still the RFC 2606 placeholder
+// `https://racinedor.example` — a `.example` domain can never resolve, so
+// nothing here is silently published as a real canonical. Replace ONLY
+// the `site:` value in astro.config.mjs once the real domain is known;
+// every tag below updates automatically.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+
+// Phase 9.2 §15 — minimal Organization structured data: only facts already
+// approved elsewhere on the site (brand name, positioning, the real logo).
+// Deliberately omits sameAs/address/foundingDate/aggregateRating/founder —
+// none of those are known, and inventing them is explicitly out of scope.
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: "Racine d'Or",
+  url: Astro.site ? Astro.site.toString() : undefined,
+  logo: ogImageURL.toString(),
+  description:
+    'Marque de soins capillaires pensée pour nourrir, fortifier et prendre soin des cheveux, du cuir chevelu et des racines.',
+};
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="theme-color" content="#171c11" />
+
+    <!-- Phase 9.2 — real Racine d'Or logo (favicon.svg's typographic "RO"
+         was a placeholder, replaced now that a real asset exists). -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph / Twitter — static per-page via BaseLayout props; this
+         site has a single page today, so title/description below are
+         index.astro's. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Racine d'Or" />
+    <meta property="og:locale" content="fr_CI" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(organizationLd)} is:inline />
+
+    <!-- Phase 9.1 perf audit: Opening Journey's first serum frame is the
+         real LCP candidate (it's the Hero background), but the browser
+         can't discover its URL until main.ts loads and runs — measured
+         under a Slow 4G throttle, that meant several extra seconds
+         before the photo appeared. A same-priority preload found at
+         parse time removes that dependency chain; it changes nothing
+         visually or architecturally, it's a resource-loading hint only. -->
+    <link rel="preload" as="image" href="/assets/frames/serum-goutte/f000.webp" fetchpriority="high" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Aller au contenu</a>
+    <slot />
+  </body>
+</html>

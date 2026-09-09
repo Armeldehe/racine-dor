@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import routineCibleeHero from '../assets/img/routine-ciblee-hero.jpg';
+
+// Phase 8 §13: real usage guidance only where confirmed. No invented
+// frequencies ("2 fois par jour", etc.) — Derma Roller usage/hygiene
+// rules are not yet confirmed, so that block stays a plain forward
+// reference rather than a fabricated instruction.
+const steps = [
+  { name: 'Sérum', text: 'Appliquer sur le cuir chevelu ou les zones ciblées, puis masser délicatement.' },
+  { name: 'Beurre', text: 'Appliquer selon les besoins de la chevelure pour nourrir et prendre soin des cheveux.' },
+  { name: 'Derma Roller', text: 'Les recommandations détaillées sont communiquées avec la routine.' },
+];
+---
+
+<section id="rituel" class="rituel" data-cta-label="Commander" data-cta-mode="compact" aria-labelledby="rituel-h">
+  <Image
+    src={routineCibleeHero}
+    alt=""
+    widths={[480, 800]}
+    sizes="100vw"
+    loading="lazy"
+    class="rituel__bg"
+  />
+  <div class="rituel__scrim" aria-hidden="true"></div>
+  <div class="rituel__content">
+    <h2 id="rituel-h" class="rituel__title" data-reveal>Ton rituel<br />Racine d'Or</h2>
+    <dl class="rituel__steps">
+      {steps.map((s, i) => (
+        <div class="rituel__step" data-reveal style={`--i:${i + 1}`}>
+          <dt>{s.name}</dt>
+          <dd>{s.text}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .rituel {
+    position: relative;
+    min-height: 90svh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .rituel__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 25% 60%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .rituel__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(15, 15, 10, 0.55), rgba(15, 15, 10, 0.78));
+    pointer-events: none;
+  }
+  .rituel__content {
+    position: relative;
+    z-index: 2;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    width: 100%;
+  }
+  .rituel__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--lh-display);
+    margin-bottom: 28px;
+  }
+  .rituel__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 420px;
+  }
+  .rituel__step {
+    padding-top: 16px;
+    border-top: 1px solid var(--line-on-dark);
+  }
+  .rituel__step dt {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    color: var(--text-gold);
+  }
+  .rituel__step dd {
+    margin: 6px 0 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--lh-body);
+    color: var(--text-on-forest);
+  }
+  .js-reveal .rituel__step[data-reveal],
+  .js-reveal .rituel__title[data-reveal] {
+    transition-delay: calc(var(--i, 0) * 120ms);
+  }
+</style>

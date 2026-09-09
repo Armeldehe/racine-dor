@@ -1,0 +1,218 @@
+---
+// PHASE 7 — Opening Journey, ORIGINAL video.currentTime-scrub engine.
+// Kept only as a comparison reference after Phase 7.1 replaced the live
+// /qa/opening-journey route with a frame-sequence canvas renderer (real
+// scroll QA found small stutters/freezes from repeated video seeking).
+// See OpeningJourney.astro for the current, live version. Do not modify
+// further — this is a frozen reference copy.
+import { Image } from 'astro:assets';
+import serumHeroMobile from '../assets/img/serum-hero-mobile.jpg';
+
+const SERUM_VIDEO_SRC = '/assets/video/serum-goute.mp4';
+const BUTTER_VIDEO_SRC = '/assets/video/beurre.mp4';
+---
+
+<section
+  class="opening-journey"
+  data-opening-journey
+  data-cta-label="Commander"
+  data-cta-mode="hidden"
+  aria-label="Racine d'Or — l'histoire du soin"
+>
+  <div class="opening-journey__stage">
+    <Image
+      src={serumHeroMobile}
+      alt="Sérum Capillaire Fortifiant Racine d'Or, flacon ambré posé sur une composition botanique en lumière chaude"
+      widths={[420, 700, 941]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="opening-journey__layer opening-journey__hero-img"
+      data-layer="hero-img"
+    />
+
+    <div class="opening-journey__layer opening-journey__scrim" aria-hidden="true"></div>
+
+    <div class="opening-journey__layer opening-journey__hero-content" data-layer="hero-content">
+      <p class="opening-journey__brand">Racine d'Or</p>
+      <p class="opening-journey__quote">
+        « Chaque goutte est un soin<br />précieux pour tes racines. »
+      </p>
+      <a class="opening-journey__cta" href="#opening-journey-end">
+        Découvrir ma routine
+        <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+
+    <video
+      class="opening-journey__layer opening-journey__video opening-journey__video--serum"
+      data-layer="serum-video"
+      src={SERUM_VIDEO_SRC}
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    ></video>
+
+    <div class="opening-journey__layer opening-journey__flash" data-layer="flash" aria-hidden="true"></div>
+
+    <video
+      class="opening-journey__layer opening-journey__video opening-journey__video--butter"
+      data-layer="butter-video"
+      src={BUTTER_VIDEO_SRC}
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    ></video>
+
+    <div class="opening-journey__layer opening-journey__exit-content" data-layer="exit-content">
+      <p class="opening-journey__exit-line">Nourrir en profondeur.</p>
+      <p class="opening-journey__exit-teaser">Découvrir les soins Racine d'Or</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .opening-journey {
+    position: relative;
+    /* 380svh: enough scroll room for the establishing shot, the drop
+       forming/detaching/falling, a short flash, the lid opening, the
+       tilt-and-reveal, and the exit — without ever leaving a stretch of
+       scroll with no visible change (the Phase 5/6 "dead scroll" lesson). */
+    height: 380svh;
+    background: var(--forest-deep);
+  }
+  .opening-journey__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .opening-journey__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .opening-journey__hero-img {
+    z-index: 0;
+    object-position: 50% 38%;
+    transform-origin: 50% 42%;
+    will-change: transform, opacity;
+  }
+
+  .opening-journey__scrim {
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 18, 10, 0.22) 0%,
+      rgba(15, 18, 10, 0) 34%,
+      rgba(15, 18, 10, 0) 54%,
+      rgba(15, 18, 10, 0.86) 100%
+    );
+  }
+
+  .opening-journey__hero-content {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    will-change: transform, opacity;
+  }
+  .opening-journey__brand {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 9vw, 3.4rem);
+    line-height: 1;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .opening-journey__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 4.4vw, 1.6rem);
+    line-height: 1.4;
+    text-wrap: balance;
+    opacity: 0.94;
+    max-width: 640px;
+  }
+  .opening-journey__cta {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 8px;
+    margin-top: 26px;
+    padding: 12px 18px;
+    border: 1.5px solid rgba(244, 238, 220, 0.7);
+    border-radius: 100px;
+    color: var(--text-on-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.82rem;
+    opacity: 0.92;
+    pointer-events: auto;
+  }
+
+  .opening-journey__video {
+    z-index: 3;
+    opacity: 0;
+    background: #171c11;
+    will-change: opacity, filter, transform;
+  }
+  .opening-journey__video--serum {
+    object-position: 50% 42%;
+  }
+  .opening-journey__video--butter {
+    z-index: 4;
+    object-position: 50% 46%;
+  }
+
+  /* Short golden match-cut flash — a wipe, never a physical liquid-to-
+     butter morph. Sits above the serum video, below the butter video's
+     own natural fade-in. */
+  .opening-journey__flash {
+    z-index: 3;
+    background: radial-gradient(120% 100% at 50% 55%, #f7e2a8 0%, #d9b968 46%, #8a621f 100%);
+    opacity: 0;
+  }
+
+  .opening-journey__exit-content {
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    gap: 6px;
+    padding: var(--gutter);
+    padding-bottom: calc(var(--gutter) + var(--bar-clearance));
+    color: var(--text-on-dark);
+    opacity: 0;
+    background: linear-gradient(180deg, rgba(15, 18, 10, 0) 40%, rgba(15, 18, 10, 0.55) 100%);
+  }
+  .opening-journey__exit-line {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(1.4rem, 6vw, 2.1rem);
+  }
+  .opening-journey__exit-teaser {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-on-dark-soft);
+    letter-spacing: 0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .opening-journey__layer {
+      transition: none !important;
+    }
+  }
+</style>

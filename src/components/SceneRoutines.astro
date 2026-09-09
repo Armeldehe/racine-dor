@@ -1,0 +1,129 @@
+---
+// Phase 8.4 — Routines as an editorial sequence with a deliberate visual
+// progression (Précision → Équilibre → climax), not three equal cards.
+// Order matters: Booster is now last, so the sequence itself builds
+// toward it.
+import routineCibleeHero from '../assets/img/routine-ciblee-hero.jpg';
+import duoHero from '../assets/img/duo-hero.jpg';
+import boosterHero from '../assets/img/booster-hero.jpg';
+import KitCard from './KitCard.astro';
+import { KITS, greetingFor, priceToNumber } from '../config/site';
+
+const routineCiblee = KITS.find((k) => k.id === 'routine-ciblee')!;
+const duo = KITS.find((k) => k.id === 'duo-croissance')!;
+const booster = KITS.find((k) => k.id === 'booster')!;
+// Section-level fallback for the shared WhatsApp bar, in case this
+// section's own dominance is measured before kit-swipe.ts's per-card
+// rd:cta-override fires (each KitCard already provides its own correct
+// message once centered).
+const boosterMessage = greetingFor(booster.name, booster.price);
+---
+
+<section
+  id="routines"
+  class="routines"
+  data-cta-label={booster.ctaLabel}
+  data-cta-message={boosterMessage}
+  data-cta-mode="contextual"
+  data-cta-track-source="routines"
+  data-cta-track-item="booster"
+  data-cta-track-item-type="kit"
+  data-cta-track-price={priceToNumber(booster.price)}
+  aria-labelledby="routines-h"
+>
+  <h2 id="routines-h" class="routines__title" data-reveal>Choisis ta routine</h2>
+  <div class="routines__row" data-kit-row role="list">
+    <div role="listitem">
+      <KitCard kit={routineCiblee} image={routineCibleeHero} imgAlt="Sérum et Derma Roller Racine d'Or côte à côte" index={0} />
+    </div>
+    <div role="listitem">
+      <KitCard kit={duo} image={duoHero} imgAlt="Beurre Rénovateur et Sérum Racine d'Or côte à côte" index={1} />
+    </div>
+    <div role="listitem">
+      <KitCard
+        kit={booster}
+        image={boosterHero}
+        imgAlt="Sérum, Beurre Rénovateur et Derma Roller Racine d'Or réunis"
+        index={2}
+      />
+    </div>
+  </div>
+
+  <div class="routines__footer">
+    <div class="routines__progress" data-kit-progress aria-hidden="true">
+      <span class="routines__progress-item is-active" data-kit-progress-item="0">01</span>
+      <span class="routines__progress-line"></span>
+      <span class="routines__progress-item" data-kit-progress-item="1">02</span>
+      <span class="routines__progress-line"></span>
+      <span class="routines__progress-item" data-kit-progress-item="2">03</span>
+    </div>
+    <p class="routines__hint">Glisse pour comparer les routines →</p>
+  </div>
+</section>
+
+<style>
+  .routines {
+    position: relative;
+    z-index: 1;
+    /* Pulled up to overlap Beurre's tail — the emerging cutout jar is
+       still visible as this scene's title rises over it. */
+    margin-top: -12vh;
+    padding: calc(clamp(56px, 12vh, 100px) + 12vh) 0 clamp(56px, 12vh, 100px);
+    background: linear-gradient(180deg, transparent 0%, #22281a 12vh, #171c11 100%);
+    color: var(--text-on-dark);
+    overflow: hidden;
+  }
+  .routines__title {
+    padding: 0 var(--gutter);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    margin-bottom: 32px;
+    line-height: var(--lh-display);
+  }
+  .routines__row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    padding: 24px var(--gutter) 16px;
+  }
+  .routines__row > div {
+    display: contents;
+  }
+
+  .routines__footer {
+    margin-top: 20px;
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .routines__progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text-muted-on-dark);
+  }
+  .routines__progress-line {
+    width: 20px;
+    height: 1px;
+    background: var(--line-on-dark);
+  }
+  .routines__progress-item {
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .routines__progress-item.is-active {
+    color: var(--gold-bright);
+  }
+  .routines__hint {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--text-muted-on-dark);
+  }
+</style>

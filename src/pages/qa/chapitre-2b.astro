@@ -1,0 +1,74 @@
+---
+import '../../styles/global.css';
+import SceneMatiereVideo from '../../components/SceneMatiereVideo.astro';
+import WhatsAppBar from '../../components/WhatsAppBar.astro';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>QA — Chapitre 2B (video scrub)</title>
+  </head>
+  <body>
+    <main id="main">
+      <section class="qa-slug qa-slug--before">
+        <p>↓ Fait défiler pour entrer dans le Chapitre 2B ↓</p>
+      </section>
+      <SceneMatiereVideo />
+      <section class="qa-slug qa-slug--after">
+        <p>Fin du Chapitre 2B — suite du site normalement ici (Beurre, etc.)</p>
+      </section>
+    </main>
+    <div class="qa-readout" id="qaReadout">— / —</div>
+    <WhatsAppBar />
+    <script src="../../scripts/main-chapitre-2b.ts"></script>
+    <script>
+      const readout = document.getElementById('qaReadout');
+      const wrapper = document.querySelector('[data-matter-video]') as HTMLElement | null;
+      const video = wrapper?.querySelector('video') as HTMLVideoElement | null;
+      if (readout && wrapper) {
+        function tick() {
+          const progress = Number(wrapper!.getAttribute('data-progress') || '0');
+          const mode = wrapper!.getAttribute('data-mode') || '—';
+          const vt = video ? video.currentTime : 0;
+          readout!.textContent =
+            Math.round(progress * 100) + '%  ·  ' + vt.toFixed(2) + 's  ·  MODE: ' + mode;
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .qa-slug {
+    min-height: 60svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--gutter);
+    background: var(--ivoire);
+    color: var(--text-soft);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+  .qa-readout {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    background: rgba(10, 12, 8, 0.85);
+    color: #d9b968;
+    font-family: monospace;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+</style>
