@@ -13,11 +13,8 @@ const { title, description, ogImage = '/og-image.jpg' } = Astro.props;
 
 // Phase 9.2 §6 — astro.config.mjs's `site` is the single source of truth
 // for every absolute URL this layout emits (canonical, og:url, og:image,
-// twitter:image, structured data). It is still the RFC 2606 placeholder
-// `https://racinedor.example` — a `.example` domain can never resolve, so
-// nothing here is silently published as a real canonical. Replace ONLY
-// the `site:` value in astro.config.mjs once the real domain is known;
-// every tag below updates automatically.
+// twitter:image, structured data). Set to the official production domain
+// (https://racinedor.ci) — every tag below derives from it automatically.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(ogImage, Astro.site);
 
