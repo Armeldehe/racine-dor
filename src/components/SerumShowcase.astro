@@ -31,8 +31,8 @@ const price = priceToNumber(serum.price);
     <Image
       src={serumDropMacro}
       alt="Goutte de Sérum Capillaire Fortifiant Racine d'Or suspendue à l'embout du flacon, ambiance botanique dorée"
-      widths={[420, 700, 960]}
-      sizes="(min-width: 900px) 55vw, 100vw"
+      widths={[420, 700, 960, 1200]}
+      sizes="(min-width: 1024px) 720px, 100vw"
       loading="lazy"
       class="serum-showcase__img"
       data-reveal
@@ -176,5 +176,36 @@ const price = priceToNumber(serum.price);
 
   .js-reveal .serum-showcase__body [data-reveal] {
     transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  /* Phase 10 — desktop: a real editorial chapter (text left, macro photo
+     right) instead of the mobile strip-then-column stacked and stretched.
+     DOM order is unchanged (image markup stays first — screen readers
+     still meet the text first since it's a grid `order`, not a layout
+     that depends on source order); only the visual composition moves. */
+  @media (min-width: 1024px) {
+    .serum-showcase {
+      display: grid;
+      grid-template-columns: minmax(360px, 460px) 1fr;
+      column-gap: clamp(48px, 6vw, 96px);
+      align-items: stretch;
+      max-width: 1440px;
+      margin-inline: auto;
+    }
+    .serum-showcase__frame {
+      order: 2;
+      height: auto;
+      min-height: 620px;
+    }
+    .serum-showcase__body {
+      order: 1;
+      grid-row: 1;
+      max-width: 420px;
+      padding: clamp(72px, 12vh, 128px) clamp(40px, 5vw, 64px) clamp(72px, 10vh, 96px) var(--gutter);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(217, 185, 104, 0.25);
+    }
   }
 </style>

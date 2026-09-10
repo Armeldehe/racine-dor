@@ -20,13 +20,41 @@
 // fabricating a new backing plate.
 import { Image } from 'astro:assets';
 import logoMark from '../assets/img/logo-fond_blanc.jpeg';
+import { buildWhatsAppLink, greetingFor } from '../config/site';
 
 const year = new Date().getFullYear();
+const commanderHref = buildWhatsAppLink(greetingFor("ma routine Racine d'Or"));
 ---
 
 <footer class="site-footer">
-  <Image src={logoMark} alt="" aria-hidden="true" width={200} height={200} loading="lazy" class="site-footer__mark" />
-  <p class="site-footer__brand">Racine d'Or</p>
+  <!-- Phase 10 — desktop-only structured row (§22): the existing logo +
+       brand name, a "navigation rapide" reusing the header's own anchors,
+       and a WhatsApp link reusing the existing config/message pattern —
+       no invented data (no email/address/social links/mentions légales).
+       Hidden below 1024px; mobile markup/appearance is unchanged. -->
+  <div class="site-footer__top">
+    <div class="site-footer__brand-group">
+      <Image src={logoMark} alt="" aria-hidden="true" width={200} height={200} loading="lazy" class="site-footer__mark" />
+      <p class="site-footer__brand">Racine d'Or</p>
+    </div>
+    <nav class="site-footer__nav" aria-label="Navigation rapide">
+      <a href="#bienfaits">Soins</a>
+      <a href="#routines">Routines</a>
+      <a href="#assistant">Trouver ma routine</a>
+      <a href="#marque">Notre histoire</a>
+    </nav>
+    <a
+      class="site-footer__whatsapp"
+      href={commanderHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track-source="footer"
+      data-track-item="generic"
+      data-track-item-type="generic"
+    >
+      Commander sur WhatsApp
+    </a>
+  </div>
   <p class="site-footer__tagline">« Chaque goutte est un soin précieux pour tes racines. »</p>
   <p class="site-footer__signature">Pensé pour tes racines. Made in Côte d'Ivoire.</p>
   <p class="site-footer__copy">© {year} Racine d'Or</p>
@@ -73,5 +101,77 @@ const year = new Date().getFullYear();
     font-family: var(--font-body);
     font-size: var(--text-xs);
     color: var(--text-muted-on-dark);
+  }
+
+  /* Mobile/tablet (<1024px): plain wrappers, no layout effect — the logo
+     and brand name stack and center exactly as before; the nav/WhatsApp
+     row is desktop-only. */
+  .site-footer__nav,
+  .site-footer__whatsapp {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer {
+      text-align: left;
+      padding-left: clamp(48px, 6vw, 96px);
+      padding-right: clamp(48px, 6vw, 96px);
+    }
+    .site-footer__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(24px, 4vw, 56px);
+      max-width: var(--content-max);
+      margin: 0 auto;
+    }
+    .site-footer__brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: none;
+    }
+    .site-footer__mark {
+      margin: 0;
+      width: 44px;
+    }
+    .site-footer__brand {
+      margin-top: 0;
+    }
+    .site-footer__nav {
+      display: flex;
+      gap: clamp(20px, 3vw, 40px);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+    }
+    .site-footer__nav a {
+      color: var(--text-muted-on-dark);
+      text-decoration: none;
+    }
+    .site-footer__nav a:hover,
+    .site-footer__nav a:focus-visible {
+      color: var(--text-on-forest);
+    }
+    .site-footer__whatsapp {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      min-height: var(--btn-min-height);
+      padding: var(--btn-padding-y) var(--btn-padding-x);
+      border-radius: var(--btn-radius);
+      background: var(--gold-bright);
+      color: #1b1607;
+      font-family: var(--btn-font);
+      font-weight: var(--btn-font-weight);
+      font-size: var(--btn-font-size);
+      text-decoration: none;
+    }
+    .site-footer__tagline,
+    .site-footer__signature,
+    .site-footer__copy {
+      max-width: var(--content-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 </style>

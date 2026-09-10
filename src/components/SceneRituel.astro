@@ -107,4 +107,35 @@ const steps = [
   .js-reveal .rituel__title[data-reveal] {
     transition-delay: calc(var(--i, 0) * 120ms);
   }
+
+  /* Phase 10 — desktop: the same 3 steps read as a horizontal editorial
+     rhythm instead of a narrow mobile column. Numerals are pure CSS
+     (counter-generated) — no copy added, no instructions invented. */
+  @media (min-width: 1024px) {
+    .rituel__content {
+      max-width: var(--content-max);
+      margin-inline: auto;
+    }
+    .rituel__steps {
+      flex-direction: row;
+      max-width: none;
+      gap: clamp(32px, 4vw, 64px);
+      counter-reset: rituel-step;
+    }
+    .rituel__step {
+      flex: 1;
+      counter-increment: rituel-step;
+    }
+    .rituel__step dt::before {
+      content: counter(rituel-step, decimal-leading-zero) '  ';
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--text-xs);
+      letter-spacing: 0.06em;
+      color: var(--text-gold);
+      opacity: 0.8;
+    }
+  }
 </style>

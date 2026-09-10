@@ -126,4 +126,36 @@ const boosterMessage = greetingFor(booster.name, booster.price);
     font-size: var(--text-xs);
     color: var(--text-muted-on-dark);
   }
+
+  /* Phase 10 — desktop: a static asymmetric composition, not a mouse-
+     dragged carousel (§15 — swipe is a touch idiom, not a cursor one).
+     Same 3 cards, same hierarchy (Ciblée = précision, Duo = équilibre,
+     Booster = climax) — Booster's column is simply wider, and every card
+     is fully visible/legible at once instead of one "active" card at a
+     time (see kit-swipe.ts's own desktop guard, and KitCard.astro's
+     matching override of the now-inapplicable dim/focus state). */
+  @media (min-width: 1024px) {
+    .routines__title,
+    .routines__row,
+    .routines__footer {
+      max-width: var(--content-max);
+      margin-inline: auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+    .routines__row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.35fr;
+      align-items: end;
+      gap: 28px;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    /* Nothing to swipe any more — the affordance and progress dots would
+       be misleading on a layout where all three are already visible. */
+    .routines__progress,
+    .routines__hint {
+      display: none;
+    }
+  }
 </style>

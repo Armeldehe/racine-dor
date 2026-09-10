@@ -128,4 +128,27 @@ const concepts = [
   .js-reveal .benefits [data-reveal] {
     transition-delay: calc(var(--i, 0) * 90ms);
   }
+
+  /* Phase 10 — desktop: an editorial two-column composition (intro fixed
+     left, manifesto reading down the right) instead of the mobile column
+     simply stretched full-width. Same four concepts, same order, same
+     copy — only the composition changes. */
+  @media (min-width: 1024px) {
+    .benefits {
+      display: grid;
+      grid-template-columns: minmax(300px, 420px) 1fr;
+      column-gap: clamp(64px, 7vw, 120px);
+      align-items: start;
+      max-width: var(--content-max);
+      margin-inline: auto;
+    }
+    .benefits__intro {
+      max-width: none;
+      position: sticky;
+      top: calc(var(--header-height) + 56px);
+    }
+    .benefits__manifesto {
+      margin-top: 0;
+    }
+  }
 </style>

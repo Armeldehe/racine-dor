@@ -138,4 +138,34 @@ import brandRootsClean from '../assets/img/brand-roots-clean.jpg';
   .js-reveal .marque__body [data-reveal] {
     transition-delay: calc(var(--i, 0) * 90ms);
   }
+
+  /* Phase 10 — desktop: a two-column composition (the vision paragraph as
+     a large phrase on the left, the three shorter paragraphs stacked on
+     the right) instead of one long centered mobile column. Same four
+     paragraphs, same order in the DOM, same copy — only which side each
+     sits on and the vision paragraph's own scale change. */
+  @media (min-width: 1024px) {
+    .marque__body {
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(48px, 6vw, 96px);
+      align-items: start;
+    }
+    .marque__body p {
+      max-width: 52ch;
+    }
+    .marque__vision {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      align-self: center;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      line-height: 1.4;
+    }
+    .marque__body p:not(.marque__vision) {
+      grid-column: 2;
+    }
+  }
 </style>

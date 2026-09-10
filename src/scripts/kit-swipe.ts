@@ -11,6 +11,13 @@ export function initKitSwipe(): void {
   const row = document.querySelector<HTMLElement>('[data-kit-row]');
   if (!row) return;
 
+  // Phase 10 — desktop shows all three routines at once in a static grid
+  // (SceneRoutines.astro's >=1024px rules); there is no "centered card"
+  // concept to track there, and forcing this swipe-only behavior onto a
+  // mouse-driven static layout is exactly what §15 says not to do. A
+  // one-time check at init, not a resize-reactive engine.
+  if (window.innerWidth >= 1024) return;
+
   const cards = Array.from(row.querySelectorAll<HTMLElement>('[data-kit-card]'));
   if (!cards.length || !('IntersectionObserver' in window)) return;
 

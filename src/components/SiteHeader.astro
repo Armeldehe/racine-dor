@@ -13,8 +13,9 @@ const commanderHref = buildWhatsAppLink(greetingFor("ma routine Racine d'Or"));
 <header class="site-header">
   <a class="site-header__brand" href="#main">Racine d'Or</a>
   <nav class="site-header__nav" aria-label="Navigation principale">
-    <a href="#soins">Soins</a>
+    <a href="#bienfaits">Soins</a>
     <a href="#routines">Routines</a>
+    <a href="#assistant" class="site-header__nav-finder">Trouver ma routine</a>
     <a href="#marque">Notre histoire</a>
   </nav>
   <a
@@ -67,6 +68,11 @@ const commanderHref = buildWhatsAppLink(greetingFor("ma routine Racine d'Or"));
   .site-header__nav a:focus-visible {
     color: var(--text-on-forest);
   }
+  /* "Trouver ma routine" — desktop-only nav item (§4): the mobile/tablet
+     nav (640–1023px) stays exactly as validated, unchanged. */
+  .site-header__nav-finder {
+    display: none;
+  }
   .site-header__cta {
     flex: none;
     display: inline-flex;
@@ -85,6 +91,15 @@ const commanderHref = buildWhatsAppLink(greetingFor("ma routine Racine d'Or"));
   @media (min-width: 640px) {
     .site-header__nav {
       display: flex;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-header__nav-finder {
+      display: inline;
+    }
+    .site-header__brand {
+      font-size: 1.3rem;
     }
   }
 </style>

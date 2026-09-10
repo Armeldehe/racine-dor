@@ -92,6 +92,11 @@
   /* layout */
   --gutter: clamp(20px, 6vw, 48px);
   --radius: 6px;
+  /* Phase 10 — desktop content width (§24). Most desktop-only section
+     rules share this; a few (Sérum's 2-col split, the Finder's narrower
+     consultation column, Brand Story's reading measure) deliberately use
+     their own value instead — not every section needs the same column. */
+  --content-max: 1360px;
   /* Space to keep clear above the fixed WhatsApp bar so it never
      overlaps a section's own bottom-anchored content. */
   --bar-clearance: 88px;
