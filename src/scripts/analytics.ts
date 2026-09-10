@@ -27,11 +27,16 @@ export interface AnalyticsEventProperties {
 
 declare global {
   interface Window {
-    // Assigned by a future analytics provider's own bootstrap script, if
-    // one is ever deliberately added (see Phase 9.3 report §23 — not
-    // implemented now). Absent by default, in which case trackEvent()
-    // does nothing beyond the optional debug log below.
+    // Assigned by a provider bridge (see initClarityBridge() below), if
+    // one is registered. Absent by default (e.g. Clarity not loaded on
+    // this hostname, blocked by an ad blocker, or never initialized), in
+    // which case trackEvent() does nothing beyond the optional debug log.
     __rdAnalyticsSink?: (name: AnalyticsEventName, properties: AnalyticsEventProperties) => void;
+    // Defined by the Microsoft Clarity snippet in BaseLayout.astro — a
+    // queueing function before the real tag script has loaded, the real
+    // API once it has. Never called directly from components; only from
+    // initClarityBridge() below.
+    clarity?: (...args: unknown[]) => void;
   }
 }
 
@@ -53,6 +58,37 @@ export function trackEvent(name: AnalyticsEventName, properties: AnalyticsEventP
   } catch {
     // Analytics must never break the site.
   }
+}
+
+/**
+ * Bridges trackEvent() to Microsoft Clarity's Custom Events API — the only
+ * provider wired in so far. Registers the sink that trackEvent() already
+ * calls; no component calls window.clarity directly (UI -> trackEvent ->
+ * this bridge -> Clarity).
+ *
+ * Clarity's API has no per-event properties object, only:
+ *   clarity('set', key, value)   — a session-level custom tag
+ *   clarity('event', name)       — the named custom event itself
+ * so any non-PII context (source/item/item_type/price/recommendation —
+ * all already-public product/routine identifiers, never free text) is set
+ * as tags immediately before firing the event.
+ *
+ * Safe by construction: if Clarity never loaded (wrong hostname, ad
+ * blocker, script blocked, not yet ready), `window.clarity` is undefined
+ * and this sink is simply never called with a working provider — same
+ * try/catch-guarded no-op behavior as the rest of trackEvent().
+ */
+export function initClarityBridge(): void {
+  window.__rdAnalyticsSink = (name, properties) => {
+    const clarity = window.clarity;
+    if (typeof clarity !== 'function') return;
+    if (properties.source) clarity('set', 'source', properties.source);
+    if (properties.item) clarity('set', 'item', properties.item);
+    if (properties.item_type) clarity('set', 'item_type', properties.item_type);
+    if (properties.price != null) clarity('set', 'price', String(properties.price));
+    if (properties.recommendation) clarity('set', 'recommendation', properties.recommendation);
+    clarity('event', name);
+  };
 }
 
 /**
