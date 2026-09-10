@@ -159,8 +159,21 @@ export function initOpeningJourney(): void {
 
   if (!scrim || !heroContent || !heroCta || !serumCanvas || !flash || !butterCanvas || !exitContent) return;
 
-  const serumSeq = new FrameSequence({ urls: SERUM_FRAME_URLS, objectPosition: [0.5, 0.42] });
-  const butterSeq = new FrameSequence({ urls: BUTTER_FRAME_URLS, objectPosition: [0.5, 0.46] });
+  // Phase 10 — desktop framing only: a one-time check at init (not a
+  // resize-reactive engine), nudging the crop right so the wider desktop
+  // Hero column (see OpeningJourney.astro's >=1024px rules) has room to
+  // breathe on the left without the bottle/jar drifting off-frame.
+  // FrameSequence itself, timing, frame counts and scroll mapping are
+  // untouched — this only changes drawCover's crop-position parameter.
+  const isDesktopFraming = window.innerWidth >= 1024;
+  const serumSeq = new FrameSequence({
+    urls: SERUM_FRAME_URLS,
+    objectPosition: isDesktopFraming ? [0.62, 0.42] : [0.5, 0.42],
+  });
+  const butterSeq = new FrameSequence({
+    urls: BUTTER_FRAME_URLS,
+    objectPosition: isDesktopFraming ? [0.58, 0.46] : [0.5, 0.46],
+  });
 
   let serumCtx = fitCanvasToDisplaySize(serumCanvas);
   let butterCtx = fitCanvasToDisplaySize(butterCanvas);

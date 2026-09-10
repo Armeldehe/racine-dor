@@ -29,8 +29,8 @@ const price = priceToNumber(butter.price);
     <Image
       src={butterTextureMacro}
       alt=""
-      widths={[480, 800, 1100]}
-      sizes="100vw"
+      widths={[480, 800, 1100, 1300]}
+      sizes="(min-width: 1024px) 60vw, 100vw"
       loading="lazy"
       class="beurre-showcase__texture"
       data-reveal
@@ -38,8 +38,8 @@ const price = priceToNumber(butter.price);
     <Image
       src={butterCutout}
       alt="Pot de Beurre Rénovateur Racine d'Or, couvercle doré entrouvert, texture crémeuse visible"
-      widths={[240, 340, 460]}
-      sizes="(min-width: 900px) 340px, 62vw"
+      widths={[240, 340, 460, 620]}
+      sizes="(min-width: 1024px) 380px, 62vw"
       loading="lazy"
       class="beurre-showcase__jar"
       data-reveal
@@ -166,17 +166,41 @@ const price = priceToNumber(butter.price);
     transition-delay: calc(var(--i, 0) * 90ms);
   }
 
-  @media (min-width: 900px) {
+  /* Phase 10 — desktop: matière/lumière, deliberately not a mirror of
+     Sérum's flat two-column split. The texture photo dominates (~60%
+     width, full section height), the jar overlaps its edge, and the text
+     becomes a floating editorial card rather than a stacked column. */
+  @media (min-width: 1024px) {
+    .beurre-showcase {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      padding-top: 0;
+    }
     .beurre-showcase__frame {
-      float: right;
-      width: 46%;
-      height: 60svh;
-      margin: 0 var(--gutter) 24px 32px;
-      shape-outside: margin-box;
+      float: none;
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 60%;
+      height: 100%;
+      margin: 0;
+      border-radius: 0 28px 28px 0;
+    }
+    .beurre-showcase__jar {
+      right: -8%;
+      bottom: 10%;
+      width: min(28vw, 380px);
     }
     .beurre-showcase__body {
-      max-width: none;
-      padding-top: clamp(64px, 10vh, 96px);
+      position: relative;
+      z-index: 1;
+      margin-left: 54%;
+      max-width: 460px;
+      padding: clamp(48px, 5vw, 72px);
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 30px 70px rgba(40, 30, 10, 0.14);
     }
   }
 </style>

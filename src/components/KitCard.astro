@@ -231,4 +231,42 @@ const price = priceToNumber(kit.price);
     background: var(--gold-bright);
     color: #1b1607;
   }
+
+  /* Phase 10 — desktop: fills its grid cell (see SceneRoutines.astro's
+     desktop grid) instead of the mobile fixed vw-based card width; height
+     keeps the same précision/équilibre/climax progression via svh, capped
+     so the climax card can't become disproportionately tall on very tall
+     desktop viewports. Booster's larger *width* now comes from its wider
+     grid column, not from its own rule here. */
+  @media (min-width: 1024px) {
+    .kit-card,
+    .kit-card--duo,
+    .kit-card--featured {
+      width: 100%;
+    }
+    .kit-card {
+      height: 60svh;
+      max-height: 560px;
+    }
+    .kit-card--duo {
+      height: 64svh;
+      max-height: 600px;
+    }
+    .kit-card--featured {
+      height: 72svh;
+      max-height: 680px;
+    }
+    /* Static grid, not a carousel (see kit-swipe.ts's desktop guard) — no
+       single card is ever ".is-active" here, so the swipe-only dim/focus
+       state (and the text reveal it gated) must not apply; every card
+       reads at full presence all the time. */
+    .js-reveal .kit-card {
+      opacity: 1;
+      transform: none;
+    }
+    .js-reveal .kit-card__body > * {
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>

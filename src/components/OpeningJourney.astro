@@ -211,4 +211,23 @@
       transition: none !important;
     }
   }
+
+  /* Phase 10 — desktop framing only. The engine (FrameSequence, timing,
+     scroll mapping, Hero/Journey sync) is untouched; this is purely the
+     Hero copy's own scale/inset so it reads as an editorial composition
+     on wide screens instead of the mobile column simply stretched out.
+     The canvas's own crop is nudged to match — see the one-time
+     `isDesktopFraming` check in opening-journey-scrub.ts. */
+  @media (min-width: 1024px) {
+    .opening-journey__hero-content {
+      padding-left: clamp(64px, 8vw, 140px);
+      padding-right: clamp(64px, 8vw, 140px);
+    }
+    .opening-journey__brand {
+      font-size: clamp(3.4rem, 5.2vw, 5.2rem);
+    }
+    .opening-journey__quote {
+      max-width: 30ch;
+    }
+  }
 </style>

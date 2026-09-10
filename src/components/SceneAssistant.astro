@@ -50,7 +50,7 @@ const resultImages = [
     </div>
 
     <!-- step 1 : need -->
-    <div class="assistant__step" data-assist-step hidden>
+    <div class="assistant__step assistant__step--question" data-assist-step hidden>
       <div class="assistant__progress" aria-hidden="true">
         <span class="assistant__progress-label">Question 01</span>
         <span class="assistant__progress-track"><span class="assistant__progress-dot assistant__progress-dot--q1"></span></span>
@@ -68,7 +68,7 @@ const resultImages = [
     </div>
 
     <!-- step 2 : format -->
-    <div class="assistant__step" data-assist-step hidden>
+    <div class="assistant__step assistant__step--question" data-assist-step hidden>
       <div class="assistant__progress" aria-hidden="true">
         <span class="assistant__progress-label">01</span>
         <span class="assistant__progress-track"><span class="assistant__progress-dot assistant__progress-dot--q2"></span></span>
@@ -96,8 +96,8 @@ const resultImages = [
           <Image
             src={r.src}
             alt={r.alt}
-            widths={[320, 480]}
-            sizes="(min-width: 640px) 360px, 82vw"
+            widths={[320, 480, 700]}
+            sizes="(min-width: 1024px) 480px, (min-width: 640px) 360px, 82vw"
             loading="lazy"
             class="assistant__result-img"
             data-assist-result-image
@@ -363,5 +363,50 @@ const resultImages = [
   .assistant__cta--result {
     background: var(--gold);
     color: #1b1607;
+  }
+
+  /* Phase 10 — desktop: a real two-column consultation instead of the
+     mobile column stretched vertically. Business logic/copy untouched —
+     only which side of the panel each existing element sits on. */
+  @media (min-width: 1024px) {
+    .assistant {
+      min-height: 76vh;
+    }
+    .assistant__panel {
+      max-width: 1080px;
+    }
+    /* :not([hidden]) is required — assistant.ts shows exactly one step at
+       a time via the native `hidden` attribute, and an unscoped `display`
+       here would override that (an author-origin rule always beats the
+       UA stylesheet's `[hidden]{display:none}`, regardless of
+       specificity), showing every step stacked at once. */
+    .assistant__step--question:not([hidden]) {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(360px, 1.15fr);
+      column-gap: clamp(48px, 6vw, 96px);
+      align-items: center;
+      text-align: left;
+    }
+    .assistant__step--question .assistant__progress {
+      justify-content: flex-start;
+    }
+    .assistant__options {
+      margin-top: 0;
+    }
+    .assistant__step--result:not([hidden]) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(48px, 6vw, 96px);
+      align-items: center;
+      text-align: left;
+    }
+    .assistant__result-frame {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      margin: 0;
+      width: 100%;
+      max-width: none;
+      aspect-ratio: 3 / 4;
+    }
   }
 </style>

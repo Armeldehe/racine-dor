@@ -128,4 +128,25 @@ const href = buildWhatsAppLink(greetingFor('ma routine Racine d’Or'));
     font-size: var(--text-body);
     text-decoration: none;
   }
+
+  /* Phase 10 — desktop: left-aligned editorial column (matching the Hero
+     and Sérum chapters, not a centered mobile block stretched wide) —
+     the full-bleed image and gold CTA already read as spectacular at any
+     width, this just gives the copy the same measured, non-generic
+     placement as the rest of the site. */
+  @media (min-width: 1024px) {
+    .final__content {
+      text-align: left;
+      max-width: 620px;
+      padding-left: clamp(64px, 8vw, 120px);
+    }
+    .final__title,
+    .final__subtitle {
+      margin-inline: 0;
+    }
+    .final__title {
+      font-size: clamp(3.2rem, 4.6vw, 4.8rem);
+      max-width: 13ch;
+    }
+  }
 </style>
